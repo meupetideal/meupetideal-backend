@@ -1,7 +1,9 @@
 import { Entity } from '@core/enterprise/entity';
 import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
+import { EntityValidationError } from '@core/enterprise/errors/validation.error';
+import { UserValidatorFactory } from '../validators/user.validator';
 
-interface UserProps {
+export interface UserProps {
   name: string;
   cpf: string;
   email: string;
@@ -12,6 +14,7 @@ interface UserProps {
 
 export class User extends Entity<UserProps> {
   public static create(props: UserProps, id?: UniqueEntityId): User {
+    this.validate(props);
     return new User({ ...props }, id);
   }
 
@@ -61,5 +64,14 @@ export class User extends Entity<UserProps> {
 
   set phoneNumber(phoneNumber: string) {
     this.props.phoneNumber = phoneNumber;
+  }
+
+  static validate(data: UserProps): void {
+    const validator = UserValidatorFactory.create();
+    const isValid = validator.validate(data);
+
+    if (!isValid) {
+      throw new EntityValidationError(validator.errors);
+    }
   }
 }

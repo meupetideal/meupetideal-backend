@@ -8,6 +8,11 @@
     "test:e2e": "vitest run --config ./vitest.config.e2e.ts"
   },
   "author": "Gustavo Amaral",
+  "dependencies": {
+    "@faker-js/faker": "^8.1.0",
+    "brazilian-values": "^0.13.0",
+    "zod": "^3.22.2"
+  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "@typescript-eslint/parser": "^6.7.3",
