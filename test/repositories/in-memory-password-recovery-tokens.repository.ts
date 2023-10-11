@@ -5,19 +5,23 @@ import { PasswordRecoveryToken } from '@domain/accounts/enterprise/entities/pass
 export class InMemoryPasswordRecoveryTokensRepository
   implements PasswordRecoveryTokensRepository
 {
-  private passwordRecoveryTokens: PasswordRecoveryToken[] = [];
+  items: PasswordRecoveryToken[] = [];
 
   public async findByToken(
-    token: string,
+    token: UniqueEntityId,
   ): Promise<PasswordRecoveryToken | undefined> {
-    return this.passwordRecoveryTokens.find((passwordRecoveryToken) =>
-      passwordRecoveryToken.token.equals(UniqueEntityId.create(token)),
-    );
+    return this.items.find((item) => item.token.equals(token));
   }
 
-  public async insert(
-    passwordRecoveryToken: PasswordRecoveryToken,
-  ): Promise<void> {
-    this.passwordRecoveryTokens.push(passwordRecoveryToken);
+  public async insert(entity: PasswordRecoveryToken): Promise<void> {
+    this.items.push(entity);
+  }
+
+  public async delete(entity: PasswordRecoveryToken): Promise<void> {
+    const index = this.items.findIndex(
+      (item) => item.id.value === entity.id.value,
+    );
+
+    this.items.splice(index, 1);
   }
 }
