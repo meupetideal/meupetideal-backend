@@ -1,7 +1,7 @@
 import { InMemoryUsersRepository } from 'test/repositories/in-memory-users.repository';
-import { makeUser } from 'test/factories/make-user';
 import { FakeHasher } from 'test/gateways/fake-hasher';
 import { FakeEncrypter } from 'test/gateways/fake-encrypter';
+import { UserBuilder } from 'test/data-builders/user.builder';
 import { UsersRepository } from '../repositories/users.repository';
 import { AuthenticateUserUseCase } from './authenticate-user.use-case';
 import { HasherGateway } from '../gateways/hasher';
@@ -35,10 +35,10 @@ describe('#UC03 AuthenticateUserUseCase', () => {
     const hasherCompareSpy = vi.spyOn(hasher, 'compare');
     const encrypterEncryptSpy = vi.spyOn(encrypter, 'encrypt');
 
-    const user = makeUser({
-      email: 'test@email.com',
-      hashedPassword: 'some-password-hashed',
-    });
+    const user = UserBuilder.create()
+      .withEmail('test@email.com')
+      .withHashedPassword('some-password-hashed')
+      .build();
     await usersRepository.insert(user);
 
     const input = {
@@ -73,10 +73,10 @@ describe('#UC03 AuthenticateUserUseCase', () => {
   });
 
   it('should throw an error if the password is wrong', async () => {
-    const user = makeUser({
-      email: 'test@email.com',
-      hashedPassword: 'some-password-hashed',
-    });
+    const user = UserBuilder.create()
+      .withEmail('test@email.com')
+      .withHashedPassword('some-password-hashed')
+      .build();
     await usersRepository.insert(user);
 
     const input = {

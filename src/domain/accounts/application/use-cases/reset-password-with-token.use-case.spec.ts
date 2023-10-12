@@ -2,9 +2,10 @@ import { InMemoryUsersRepository } from 'test/repositories/in-memory-users.repos
 import { User } from '@domain/accounts/enterprise/entities/user';
 import { FakeHasher } from 'test/gateways/fake-hasher';
 import { InMemoryPasswordRecoveryTokensRepository } from 'test/repositories/in-memory-password-recovery-tokens.repository';
-import { PasswordRecoveryToken } from '@domain/accounts/enterprise/entities/password-recovery-token';
-import { makeUser } from 'test/factories/make-user';
 import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
+import { UserBuilder } from 'test/data-builders/user.builder';
+import { PasswordRecoveryTokenBuilder } from 'test/data-builders/password-recovery-token.builder';
+import { PasswordRecoveryToken } from '@domain/accounts/enterprise/entities/password-recovery-token';
 import { ResetPasswordWithTokenUseCase } from './reset-password-with-token.use-case';
 import { HasherGateway } from '../gateways/hasher';
 import { InvalidRecoveryTokenError } from './errors/invalid-recovery-token.error';
@@ -32,11 +33,10 @@ describe('#UC04 ResetPasswordWithTokenUseCase', () => {
   });
 
   it('should be able to reset an user password with a token', async () => {
-    const user = makeUser();
-    const passwordRecoveryToken = PasswordRecoveryToken.create({
-      token: UniqueEntityId.create(),
-      userId: user.id,
-    });
+    const user = UserBuilder.create().build();
+    const passwordRecoveryToken = PasswordRecoveryTokenBuilder.create()
+      .withUserId(user.id.value)
+      .build();
 
     await usersRepository.insert(user);
     await passwordRecoveryTokensRepository.insert(passwordRecoveryToken);
@@ -82,12 +82,12 @@ describe('#UC04 ResetPasswordWithTokenUseCase', () => {
   });
 
   it('should throw an error if the token is invalid', async () => {
-    const user = makeUser();
-    const passwordRecoveryToken = PasswordRecoveryToken.create({
-      token: UniqueEntityId.create(),
-      userId: user.id,
-      expiresAt: new Date(Date.now() - 1000),
-    });
+    const user = UserBuilder.create().build();
+    const passwordRecoveryToken = PasswordRecoveryTokenBuilder.create()
+      .withUserId(user.id.value)
+      .withExpiresAt(new Date(Date.now() - 1000))
+      .build();
+
     await usersRepository.insert(user);
     await passwordRecoveryTokensRepository.insert(passwordRecoveryToken);
 
@@ -103,11 +103,11 @@ describe('#UC04 ResetPasswordWithTokenUseCase', () => {
   });
 
   it('should throw an error if the passwords do not match', async () => {
-    const user = makeUser();
-    const passwordRecoveryToken = PasswordRecoveryToken.create({
-      token: UniqueEntityId.create(),
-      userId: user.id,
-    });
+    const user = UserBuilder.create().build();
+    const passwordRecoveryToken = PasswordRecoveryTokenBuilder.create()
+      .withUserId(user.id.value)
+      .build();
+
     await usersRepository.insert(user);
     await passwordRecoveryTokensRepository.insert(passwordRecoveryToken);
 
@@ -123,10 +123,7 @@ describe('#UC04 ResetPasswordWithTokenUseCase', () => {
   });
 
   it('should throw an error if the user is not found', async () => {
-    const passwordRecoveryToken = PasswordRecoveryToken.create({
-      token: UniqueEntityId.create(),
-      userId: UniqueEntityId.create(),
-    });
+    const passwordRecoveryToken = PasswordRecoveryTokenBuilder.create().build();
     await passwordRecoveryTokensRepository.insert(passwordRecoveryToken);
 
     const input = {

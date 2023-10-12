@@ -1,7 +1,7 @@
 import { InMemoryUsersRepository } from 'test/repositories/in-memory-users.repository';
 import { User } from '@domain/accounts/enterprise/entities/user';
 import { FakeHasher } from 'test/gateways/fake-hasher';
-import { makeUser } from 'test/factories/make-user';
+import { UserBuilder } from 'test/data-builders/user.builder';
 import { UsersRepository } from '../repositories/users.repository';
 import { RegisterUserUseCase } from './register-user.use-case';
 import { HasherGateway } from '../gateways/hasher';
@@ -70,7 +70,9 @@ describe('#UC01 RegisterUserUseCase', () => {
   });
 
   it('should throw UserAlreadyExistsError if user with the same email already exists', async () => {
-    const existingUser = makeUser({ email: 'existing.user@example.com' });
+    const existingUser = UserBuilder.create()
+      .withEmail('existing.user@example.com')
+      .build();
 
     await usersRepository.insert(existingUser);
 
@@ -89,7 +91,9 @@ describe('#UC01 RegisterUserUseCase', () => {
   });
 
   it('should throw UserAlreadyExistsError if user with the same cpf already exists', async () => {
-    const existingUser = makeUser({ cpf: '93725168300' });
+    const existingUser = UserBuilder.create()
+      .withCpf('93725168300')
+      .build();
 
     await usersRepository.insert(existingUser);
 

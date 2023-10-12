@@ -52,6 +52,14 @@
     ],
     "no-underscore-dangle": "off",
     "max-classes-per-file": "off",
-    "@typescript-eslint/no-explicit-any": "off"
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-empty-function": [
+      "error",
+      {
+        "allow": [
+          "constructors"
+        ]
+      }
+    ]
   }
 }
