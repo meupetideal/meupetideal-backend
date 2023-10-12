@@ -21,7 +21,7 @@ export class InMemoryUsersRepository implements UsersRepository {
     this.items.push(entity);
   }
 
-  public async update(entity: User): Promise<void> {
+  public async save(entity: User): Promise<void> {
     const index = this.items.findIndex((u) => u.id.equals(entity.id));
 
     this.items[index] = entity;

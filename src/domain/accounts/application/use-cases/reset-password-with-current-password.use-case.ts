@@ -42,6 +42,6 @@ export class ResetPasswordWithCurrentPasswordUseCase
 
     user.hashedPassword = hashedPassword;
 
-    await this.usersRepository.update(user);
+    await this.usersRepository.save(user);
   }
 }

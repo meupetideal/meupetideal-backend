@@ -47,7 +47,7 @@ describe('#UC04 ResetPasswordWithTokenUseCase', () => {
     );
     const spyDelete = vi.spyOn(passwordRecoveryTokensRepository, 'delete');
     const spyFindById = vi.spyOn(usersRepository, 'findById');
-    const spyUpdate = vi.spyOn(usersRepository, 'update');
+    const spyUpdate = vi.spyOn(usersRepository, 'save');
     const spyHash = vi.spyOn(hasher, 'hash');
 
     const input = {

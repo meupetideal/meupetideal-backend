@@ -7,5 +7,5 @@ export abstract class UsersRepository extends Repository {
   public abstract findByEmail(email: string): Promise<User | undefined>;
   public abstract findByCpf(cpf: string): Promise<User | undefined>;
   public abstract insert(entity: User): Promise<void>;
-  public abstract update(entity: User): Promise<void>;
+  public abstract save(entity: User): Promise<void>;
 }

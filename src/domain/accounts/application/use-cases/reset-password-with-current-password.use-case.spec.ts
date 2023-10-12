@@ -26,7 +26,7 @@ describe('#UC05 ResetPasswordWithCurrentPasswordUseCase', () => {
     await usersRepository.insert(user);
 
     const spyFindById = vi.spyOn(usersRepository, 'findById');
-    const spyUpdate = vi.spyOn(usersRepository, 'update');
+    const spyUpdate = vi.spyOn(usersRepository, 'save');
     const spyHash = vi.spyOn(hasher, 'hash');
 
     const input = {

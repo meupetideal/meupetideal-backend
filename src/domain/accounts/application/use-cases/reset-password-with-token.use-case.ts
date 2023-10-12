@@ -52,7 +52,7 @@ export class ResetPasswordWithTokenUseCase implements UseCase<Input, Output> {
 
     user.hashedPassword = hashedPassword;
 
-    await this.usersRepository.update(user);
+    await this.usersRepository.save(user);
 
     await this.passwordRecoveryTokensRepository.delete(passwordRecoveryToken);
   }
