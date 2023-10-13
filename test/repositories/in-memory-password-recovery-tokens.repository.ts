@@ -1,4 +1,3 @@
-import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
 import { PasswordRecoveryTokensRepository } from '@domain/accounts/application/repositories/password-recovery-tokens.repository';
 import { PasswordRecoveryToken } from '@domain/accounts/enterprise/entities/password-recovery-token';
 
@@ -8,9 +7,9 @@ export class InMemoryPasswordRecoveryTokensRepository
   items: PasswordRecoveryToken[] = [];
 
   public async findByToken(
-    token: UniqueEntityId,
+    token: string,
   ): Promise<PasswordRecoveryToken | undefined> {
-    return this.items.find((item) => item.token.equals(token));
+    return this.items.find((item) => item.token.value === token);
   }
 
   public async insert(entity: PasswordRecoveryToken): Promise<void> {

@@ -1,5 +1,4 @@
 import { UseCase } from '@core/application/use-case';
-import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
 import { UsersRepository } from '../repositories/users.repository';
 import { HasherGateway } from '../gateways/hasher';
 import { PasswordRecoveryTokensRepository } from '../repositories/password-recovery-tokens.repository';
@@ -28,9 +27,7 @@ export class ResetPasswordWithTokenUseCase implements UseCase<Input, Output> {
     passwordConfirmation,
   }: Input): Promise<Output> {
     const passwordRecoveryToken =
-      await this.passwordRecoveryTokensRepository.findByToken(
-        UniqueEntityId.create(token),
-      );
+      await this.passwordRecoveryTokensRepository.findByToken(token);
 
     if (!passwordRecoveryToken || !passwordRecoveryToken.validateToken()) {
       throw new InvalidRecoveryTokenError();
@@ -41,7 +38,7 @@ export class ResetPasswordWithTokenUseCase implements UseCase<Input, Output> {
     }
 
     const user = await this.usersRepository.findById(
-      passwordRecoveryToken.userId,
+      passwordRecoveryToken.userId.value,
     );
 
     if (!user) {

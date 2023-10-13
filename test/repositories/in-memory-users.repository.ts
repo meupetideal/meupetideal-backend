@@ -1,12 +1,11 @@
-import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
 import { UsersRepository } from '@domain/accounts/application/repositories/users.repository';
 import { User } from '@domain/accounts/enterprise/entities/user';
 
 export class InMemoryUsersRepository implements UsersRepository {
   items: User[] = [];
 
-  public async findById(id: UniqueEntityId): Promise<User | undefined> {
-    return this.items.find((entity) => entity.id.equals(id));
+  public async findById(id: string): Promise<User | undefined> {
+    return this.items.find((entity) => entity.id.value === id);
   }
 
   public async findByEmail(email: string): Promise<User | undefined> {

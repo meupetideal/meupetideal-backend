@@ -1,6 +1,5 @@
 import { InMemoryUsersRepository } from 'test/repositories/in-memory-users.repository';
 import { UserBuilder } from 'test/data-builders/user.builder';
-import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
 import { UpdateProfileUseCase } from './update-profile.use-case';
 import { UserNotFoundError } from './errors/user-not-found.error';
 import { UserAlreadyExistsError } from './errors/user-already-exists.error';
@@ -34,9 +33,7 @@ describe('#UC06 UpdateProfileUseCase', () => {
 
     const output = await updateProfileUseCase.execute(input);
 
-    expect(spyFindById).toHaveBeenCalledWith(
-      UniqueEntityId.create(input.userId),
-    );
+    expect(spyFindById).toHaveBeenCalledWith(input.userId);
     expect(spyUpdate).toHaveBeenCalledWith(existingUser);
 
     const { user } = output;

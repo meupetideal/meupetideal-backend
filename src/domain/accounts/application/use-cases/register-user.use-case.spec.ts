@@ -91,9 +91,7 @@ describe('#UC01 RegisterUserUseCase', () => {
   });
 
   it('should throw UserAlreadyExistsError if user with the same cpf already exists', async () => {
-    const existingUser = UserBuilder.create()
-      .withCpf('93725168300')
-      .build();
+    const existingUser = UserBuilder.create().withCpf('93725168300').build();
 
     await usersRepository.insert(existingUser);
 

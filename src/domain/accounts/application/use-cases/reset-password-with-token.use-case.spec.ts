@@ -60,7 +60,9 @@ describe('#UC04 ResetPasswordWithTokenUseCase', () => {
       resetPasswordWithTokenUseCase.execute(input),
     ).resolves.not.toThrowError();
 
-    expect(spyFindByToken).toHaveBeenCalledWith(passwordRecoveryToken.token);
+    expect(spyFindByToken).toHaveBeenCalledWith(
+      passwordRecoveryToken.token.value,
+    );
     expect(spyDelete).toHaveBeenCalledWith(expect.any(PasswordRecoveryToken));
     expect(spyFindById).toHaveBeenCalledOnce();
     expect(spyUpdate).toHaveBeenCalledWith(expect.any(User));

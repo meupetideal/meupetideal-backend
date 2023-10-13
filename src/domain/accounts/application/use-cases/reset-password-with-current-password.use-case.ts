@@ -1,5 +1,4 @@
 import { UseCase } from '@core/application/use-case';
-import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
 import { UsersRepository } from '../repositories/users.repository';
 import { HasherGateway } from '../gateways/hasher';
 import { UnmatchedPasswordsError } from './errors/unmatched-passwords.error';
@@ -26,9 +25,7 @@ export class ResetPasswordWithCurrentPasswordUseCase
     password,
     passwordConfirmation,
   }: Input): Promise<Output> {
-    const user = await this.usersRepository.findById(
-      UniqueEntityId.create(userId),
-    );
+    const user = await this.usersRepository.findById(userId);
 
     if (!user) {
       throw new UserNotFoundError(userId);
