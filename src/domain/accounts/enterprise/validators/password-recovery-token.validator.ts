@@ -9,7 +9,7 @@ const passwordRecoveryTokenSchema = z.object({
 
 type PasswordRecoveryTokenSchema = z.infer<typeof passwordRecoveryTokenSchema>;
 
-export class PasswordRecoveryTokenValidator extends Validator<PasswordRecoveryTokenSchema> {
+class PasswordRecoveryTokenValidator extends Validator<PasswordRecoveryTokenSchema> {
   protected schema = passwordRecoveryTokenSchema;
 }
 

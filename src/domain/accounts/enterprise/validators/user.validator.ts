@@ -23,7 +23,7 @@ const userSchema = z.object({
 
 type UserSchema = z.infer<typeof userSchema>;
 
-export class UserValidator extends Validator<UserSchema> {
+class UserValidator extends Validator<UserSchema> {
   protected schema = userSchema;
 }
 
