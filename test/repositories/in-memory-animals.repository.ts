@@ -1,10 +1,16 @@
+import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
 import { AnimalsRepository } from '@domain/adoption/application/repositories/animals.repository';
-import { Animal } from '@domain/adoption/enterprise/entities/animal';
+import { Cat } from '@domain/adoption/enterprise/entities/cat';
+import { Dog } from '@domain/adoption/enterprise/entities/dog';
 
 export class InMemoryAnimalsRepository implements AnimalsRepository {
-  public items: Animal[] = [];
+  public items: (Dog | Cat)[] = [];
 
-  public async insert(entity: Animal<unknown>): Promise<void> {
+  public async findById(id: string): Promise<Cat | Dog | undefined> {
+    return this.items.find((item) => item.id.equals(UniqueEntityId.create(id)));
+  }
+
+  public async insert(entity: Dog | Cat): Promise<void> {
     this.items.push(entity);
   }
 }
