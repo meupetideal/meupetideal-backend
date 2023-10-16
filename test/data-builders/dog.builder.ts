@@ -49,10 +49,16 @@ export class DogBuilder {
     return this;
   }
 
+  public withOwnerId(ownerId: string): DogBuilder {
+    this.ownerId = ownerId;
+    return this;
+  }
+
   public build(): Dog {
     return Dog.create(
       {
         ownerId: UniqueEntityId.create(this.ownerId),
+        species: 'dog',
         name: this.name,
         gender: AnimalGender.create(this.gender),
         approximateAge: this.approximateAge,

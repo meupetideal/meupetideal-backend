@@ -10,7 +10,7 @@ export type DogConstructor = AnimalConstructor & DogProps;
 
 export class Dog extends Animal<DogProps> {
   public static create(props: DogConstructor, id?: UniqueEntityId): Dog {
-    return new Dog(props, id);
+    return new Dog({ ...props, species: 'dog' }, id);
   }
 
   get breed(): AnimalDogBreed {

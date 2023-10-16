@@ -56,23 +56,22 @@ export class AnimalFactory {
       isDewormed: props.isDewormed,
       isNeutered: props.isNeutered,
       isSpecialNeeds: props.isSpecialNeeds,
+      breed: AnimalFactory.toDomainBreed(species, props.breed),
     };
 
+    return animalProps;
+  }
+
+  public static toDomainBreed(species: AnimalSpecies, breed: string) {
     switch (species) {
       case 'dog': {
-        return {
-          ...animalProps,
-          breed: AnimalDogBreed.create(props.breed),
-        } as DogConstructor;
+        return AnimalDogBreed.create(breed);
       }
       case 'cat': {
-        return {
-          ...animalProps,
-          breed: AnimalCatBreed.create(props.breed),
-        } as CatConstructor;
+        return AnimalCatBreed.create(breed);
       }
       default:
-        throw new InvalidAnimalSpeciesError('Invalid animal species');
+        throw new InvalidAnimalSpeciesError(species);
     }
   }
 }

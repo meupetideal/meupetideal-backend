@@ -11,6 +11,7 @@ import { AnimalStatus } from './value-objects/animal-status.vo';
 
 export interface AnimalProps {
   ownerId: UniqueEntityId;
+  species: 'dog' | 'cat';
   name: string;
   gender: AnimalGender;
   approximateAge: number;
@@ -51,6 +52,10 @@ export abstract class Animal<ChildAnimalProps = unknown> extends Entity<
   set ownerId(ownerId: UniqueEntityId) {
     this.props.ownerId = ownerId;
     this._touch();
+  }
+
+  get species(): 'dog' | 'cat' {
+    return this.props.species;
   }
 
   get name(): string {

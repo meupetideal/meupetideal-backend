@@ -49,10 +49,16 @@ export class CatBuilder {
     return this;
   }
 
+  public withOwnerId(ownerId: string): CatBuilder {
+    this.ownerId = ownerId;
+    return this;
+  }
+
   public build(): Cat {
     return Cat.create(
       {
         ownerId: UniqueEntityId.create(this.ownerId),
+        species: 'cat',
         name: this.name,
         gender: AnimalGender.create(this.gender),
         approximateAge: this.approximateAge,
