@@ -13,4 +13,10 @@ export class InMemoryAnimalsRepository implements AnimalsRepository {
   public async insert(entity: Dog | Cat): Promise<void> {
     this.items.push(entity);
   }
+
+  public async save(entity: Dog | Cat): Promise<void> {
+    const index = this.items.findIndex((item) => item.id.equals(entity.id));
+
+    this.items[index] = entity;
+  }
 }

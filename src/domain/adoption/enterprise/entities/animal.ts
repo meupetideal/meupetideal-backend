@@ -178,4 +178,8 @@ export abstract class Animal<ChildAnimalProps = unknown> extends Entity<
   private _touch(): void {
     Animal.validate(this.props);
   }
+
+  public adopt(): void {
+    this.status = AnimalStatus.create('adopted');
+  }
 }
