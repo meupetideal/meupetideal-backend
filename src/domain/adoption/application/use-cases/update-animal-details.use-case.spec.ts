@@ -24,6 +24,9 @@ describe('#UC14 UpdateAnimalDetailsUseCase', () => {
   });
 
   it('should update animal details', async () => {
+    const spyFindById = vi.spyOn(animalsRepository, 'findById');
+    const spySave = vi.spyOn(animalsRepository, 'save');
+
     const ownerId = '8b18c6af-ecc7-487e-af99-2fbaa59edd6b';
     const animalId = '1e307039-a203-43f3-8033-a8a881f71def';
 
@@ -65,6 +68,9 @@ describe('#UC14 UpdateAnimalDetailsUseCase', () => {
     expect(output.animal.isNeutered).toBe(true);
     expect(output.animal.isSpecialNeeds).toBe(true);
     expect(output.animal.breed.value).toEqual('rottweiler');
+
+    expect(spyFindById).toHaveBeenCalledWith(animalId);
+    expect(spySave).toHaveBeenCalledWith(cat);
   });
 
   it('should throw an error if animal is not found', async () => {

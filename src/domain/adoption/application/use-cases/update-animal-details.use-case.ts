@@ -80,6 +80,8 @@ export class UpdateAnimalDetailsUseCase implements UseCase<Input, Output> {
     animal.isSpecialNeeds = isSpecialNeeds;
     animal.breed = AnimalFactory.toDomainBreed(animal.species, breed);
 
+    await this.animalsRepository.save(animal);
+
     return { animal };
   }
 }
