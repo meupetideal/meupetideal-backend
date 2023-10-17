@@ -102,5 +102,15 @@ describe('User Unit Tests', () => {
 
       expect(spyValidate).toHaveBeenCalled();
     });
+
+    test('avatarUrl getter and setter', () => {
+      const user = User.create({ avatarUrl: 'firstAvatarUrl.png' } as any);
+      expect(user.avatarUrl).toBe('firstAvatarUrl.png');
+
+      user.avatarUrl = 'secondAvatarUrl.png';
+      expect(user.avatarUrl).toBe('secondAvatarUrl.png');
+
+      expect(spyValidate).toHaveBeenCalled();
+    });
   });
 });

@@ -16,6 +16,8 @@ export class UserBuilder {
 
   private phoneNumber: string = '+5595998615483';
 
+  private avatarUrl: string | undefined;
+
   private constructor() {}
 
   public static create(): UserBuilder {
@@ -57,6 +59,11 @@ export class UserBuilder {
     return this;
   }
 
+  public withAvatarUrl(avatarUrl: string): UserBuilder {
+    this.avatarUrl = avatarUrl;
+    return this;
+  }
+
   public build(): User {
     return User.create(
       {
@@ -66,6 +73,7 @@ export class UserBuilder {
         hashedPassword: this.hashedPassword,
         birthday: this.birthday,
         phoneNumber: this.phoneNumber,
+        avatarUrl: this.avatarUrl,
       },
       UniqueEntityId.create(this.id),
     );

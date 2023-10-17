@@ -10,6 +10,7 @@ export interface UserProps {
   hashedPassword: string;
   birthday: Date;
   phoneNumber: string;
+  avatarUrl?: string;
 }
 
 export class User extends Entity<UserProps> {
@@ -64,6 +65,14 @@ export class User extends Entity<UserProps> {
 
   set phoneNumber(phoneNumber: string) {
     this.props.phoneNumber = phoneNumber;
+  }
+
+  get avatarUrl(): string | undefined {
+    return this.props.avatarUrl;
+  }
+
+  set avatarUrl(avatarUrl: string | undefined) {
+    this.props.avatarUrl = avatarUrl;
   }
 
   static validate(data: UserProps): void {
