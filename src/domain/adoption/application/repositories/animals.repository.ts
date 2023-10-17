@@ -7,6 +7,7 @@ type Item = Cat | Dog;
 
 export abstract class AnimalsRepository extends Repository {
   public abstract search(data: SearchInput): Promise<SearchOutput<Item>>;
+  public abstract findManyByOwnerId(ownerId: string): Promise<Item[]>;
   public abstract findById(id: string): Promise<Item | undefined>;
   public abstract insert(entity: Item): Promise<void>;
   public abstract save(entity: Item): Promise<void>;

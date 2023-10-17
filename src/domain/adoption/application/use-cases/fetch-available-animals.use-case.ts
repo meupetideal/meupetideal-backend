@@ -10,7 +10,7 @@ type Input = {
 
 type Output = SearchOutput<Animal>;
 
-export class ListAvailableAnimalsUseCase implements UseCase<Input, Output> {
+export class FetchAvailableAnimalsUseCase implements UseCase<Input, Output> {
   constructor(private animalsRepository: AnimalsRepository) {}
 
   public async execute({ page, perPage }: Input): Promise<Output> {

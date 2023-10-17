@@ -33,6 +33,12 @@ export class InMemoryAnimalsRepository implements AnimalsRepository {
     });
   }
 
+  public async findManyByOwnerId(ownerId: string): Promise<(Cat | Dog)[]> {
+    return this.items.filter((item) =>
+      item.ownerId.equals(UniqueEntityId.create(ownerId)),
+    );
+  }
+
   public async findById(id: string): Promise<Item | undefined> {
     return this.items.find((item) => item.id.equals(UniqueEntityId.create(id)));
   }

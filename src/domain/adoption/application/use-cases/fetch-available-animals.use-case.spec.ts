@@ -3,22 +3,22 @@ import { Dog } from '@domain/adoption/enterprise/entities/dog';
 import { CatBuilder } from 'test/data-builders/cat.builder';
 import { Cat } from '@domain/adoption/enterprise/entities/cat';
 import { DogBuilder } from 'test/data-builders/dog.builder';
-import { ListAvailableAnimalsUseCase } from './list-available-animals.use-case';
+import { FetchAvailableAnimalsUseCase } from './fetch-available-animals.use-case';
 
-describe('#UC16 ListAvailableAnimalsUseCase', () => {
+describe('#UC16 FetchAvailableAnimalsUseCase', () => {
   let animalsRepository: InMemoryAnimalsRepository;
 
-  let listAvailableAnimalsUseCase: ListAvailableAnimalsUseCase;
+  let fetchAvailableAnimalsUseCase: FetchAvailableAnimalsUseCase;
 
   beforeEach(() => {
     animalsRepository = new InMemoryAnimalsRepository();
 
-    listAvailableAnimalsUseCase = new ListAvailableAnimalsUseCase(
+    fetchAvailableAnimalsUseCase = new FetchAvailableAnimalsUseCase(
       animalsRepository,
     );
   });
 
-  it('should list available animals', async () => {
+  it('should fetch available animals', async () => {
     const spySearch = vi.spyOn(animalsRepository, 'search');
 
     const cat = CatBuilder.create().build();
@@ -27,7 +27,7 @@ describe('#UC16 ListAvailableAnimalsUseCase', () => {
     const dog = DogBuilder.create().build();
     await animalsRepository.insert(dog);
 
-    const output = await listAvailableAnimalsUseCase.execute({
+    const output = await fetchAvailableAnimalsUseCase.execute({
       page: 1,
       perPage: 10,
     });
@@ -42,7 +42,7 @@ describe('#UC16 ListAvailableAnimalsUseCase', () => {
     });
   });
 
-  it('should not list unavailable animals', async () => {
+  it('should not fetch unavailable animals', async () => {
     const cat = CatBuilder.create().build();
     await animalsRepository.insert(cat);
 
@@ -50,7 +50,7 @@ describe('#UC16 ListAvailableAnimalsUseCase', () => {
     dog.adopt();
     await animalsRepository.insert(dog);
 
-    const output = await listAvailableAnimalsUseCase.execute({
+    const output = await fetchAvailableAnimalsUseCase.execute({
       page: 1,
       perPage: 10,
     });
