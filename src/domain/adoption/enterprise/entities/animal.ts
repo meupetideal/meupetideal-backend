@@ -182,4 +182,8 @@ export abstract class Animal<ChildAnimalProps = unknown> extends Entity<
   public adopt(): void {
     this.status = AnimalStatus.create('adopted');
   }
+
+  public isAvailable(): boolean {
+    return this.status.value === 'available';
+  }
 }
