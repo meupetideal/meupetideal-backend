@@ -6,7 +6,7 @@ import { UserNotFoundError } from './errors/user-not-found.error';
 import { InvalidAvatarTypeError } from './errors/invalid-avatar-type.error';
 import { InvalidAvatarSizeError } from './errors/invalid-avatar-size.error';
 
-describe('#UC06 UpdateUserAvatarUseCase', () => {
+describe('#UC08 UpdateUserAvatarUseCase', () => {
   let usersRepository: InMemoryUsersRepository;
   let storageGateway: FakeStorageGateway;
 

@@ -186,4 +186,8 @@ export abstract class Animal<ChildAnimalProps = unknown> extends Entity<
   public isAvailable(): boolean {
     return this.status.value === 'available';
   }
+
+  public isUnavailable(): boolean {
+    return this.status.value === 'adopted';
+  }
 }
