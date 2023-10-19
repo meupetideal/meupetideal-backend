@@ -6,16 +6,20 @@ import { Interest } from '@domain/adoption/enterprise/entities/interest';
 export class InMemoryInterestsRepository implements InterestsRepository {
   items: Interest[] = [];
 
-  public findByAnimalIdAndUserId(
+  public async findAllFromUserId(userId: string): Promise<Interest[]> {
+    return this.items.filter((interest) =>
+      interest.userId.equals(UniqueEntityId.create(userId)),
+    );
+  }
+
+  public async findByAnimalIdAndUserId(
     animalId: string,
     userId: string,
   ): Promise<Interest | undefined> {
-    return Promise.resolve(
-      this.items.find(
-        (interest) =>
-          interest.animalId.equals(UniqueEntityId.create(animalId)) &&
-          interest.userId.equals(UniqueEntityId.create(userId)),
-      ),
+    return this.items.find(
+      (interest) =>
+        interest.animalId.equals(UniqueEntityId.create(animalId)) &&
+        interest.userId.equals(UniqueEntityId.create(userId)),
     );
   }
 

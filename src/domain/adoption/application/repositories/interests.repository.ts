@@ -6,5 +6,6 @@ export abstract class InterestsRepository extends Repository {
     animalId: string,
     userId: string,
   ): Promise<Interest | undefined>;
+  public abstract findAllFromUserId(userId: string): Promise<Interest[]>;
   public abstract insert(entity: Interest): Promise<void>;
 }
