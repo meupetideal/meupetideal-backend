@@ -77,7 +77,7 @@ export class CatBuilder {
         status: AnimalStatus.create(this.status),
         breed: AnimalCatBreed.create(this.breed),
       },
-      UniqueEntityId.create(this.id),
+      this.id ? UniqueEntityId.create(this.id) : undefined,
     );
   }
 }

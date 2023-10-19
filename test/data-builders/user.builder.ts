@@ -75,7 +75,7 @@ export class UserBuilder {
         phoneNumber: this.phoneNumber,
         avatarUrl: this.avatarUrl,
       },
-      UniqueEntityId.create(this.id),
+      this.id ? UniqueEntityId.create(this.id) : undefined,
     );
   }
 }

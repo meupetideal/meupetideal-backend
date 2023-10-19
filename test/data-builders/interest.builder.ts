@@ -43,7 +43,7 @@ export class InterestBuilder {
         userId: UniqueEntityId.create(this.userId),
         expressedAt: this.expressedAt,
       },
-      UniqueEntityId.create(this.id),
+      this.id ? UniqueEntityId.create(this.id) : undefined,
     );
   }
 }

@@ -43,7 +43,7 @@ export class PasswordRecoveryTokenBuilder {
         token: UniqueEntityId.create(this.token),
         expiresAt: this.expiresAt,
       },
-      UniqueEntityId.create(this.id),
+      this.id ? UniqueEntityId.create(this.id) : undefined,
     );
   }
 }

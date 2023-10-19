@@ -77,7 +77,7 @@ export class DogBuilder {
         status: AnimalStatus.create(this.status),
         breed: AnimalDogBreed.create(this.breed),
       },
-      UniqueEntityId.create(this.id),
+      this.id ? UniqueEntityId.create(this.id) : undefined,
     );
   }
 }
