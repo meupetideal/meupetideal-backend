@@ -6,6 +6,12 @@ import { Interest } from '@domain/adoption/enterprise/entities/interest';
 export class InMemoryInterestsRepository implements InterestsRepository {
   items: Interest[] = [];
 
+  public async findAllByAnimalId(animalId: string): Promise<Interest[]> {
+    return this.items.filter((interest) =>
+      interest.animalId.equals(UniqueEntityId.create(animalId)),
+    );
+  }
+
   public async findAllFromUserId(userId: string): Promise<Interest[]> {
     return this.items.filter((interest) =>
       interest.userId.equals(UniqueEntityId.create(userId)),
