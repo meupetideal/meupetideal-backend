@@ -1,7 +1,8 @@
-import { Entity } from '@core/enterprise/entity';
 import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
 import { EntityValidationError } from '@core/enterprise/errors/validation.error';
+import { AggregateRoot } from '@core/enterprise/aggregate-root';
 import { UserValidatorFactory } from '../validators/user.validator';
+import { UserCreatedEvent } from '../events/user-created.event';
 
 export interface UserProps {
   name: string;
@@ -13,10 +14,17 @@ export interface UserProps {
   avatarUrl?: string;
 }
 
-export class User extends Entity<UserProps> {
+export class User extends AggregateRoot<UserProps> {
   public static create(props: UserProps, id?: UniqueEntityId): User {
     this.validate(props);
-    return new User({ ...props }, id);
+    const user = new User({ ...props }, id);
+
+    const isNew = !id;
+    if (isNew) {
+      user.addDomainEvent(new UserCreatedEvent(user));
+    }
+
+    return user;
   }
 
   get name(): string {

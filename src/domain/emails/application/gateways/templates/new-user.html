@@ -1,0 +1,36 @@
+{{#> layouts/base }}
+  {{#*inline "content-block"}}
+    {{> components/h1 text="Olá, {{name}}!"}}
+
+    <p>
+      É com grande alegria que damos as boas-vindas a você no MeuPetIdeal, a sua
+      plataforma de referência para encontrar um amigo de quatro patas.
+    </p>
+
+    <p>
+      Acreditamos no poder do amor pelos animais e na importância de dar um lar
+      a animais necessitados. Estamos aqui para conectar doadores de animais com
+      pessoas que desejam adotar e cuidar de um pet.
+    </p>
+
+    <div style="margin-top: 40px;">
+      {{> components/h2 text="Dúvidas frequentes"}}
+
+      {{> components/h3 text="Como faço para doar um pet?"}}
+
+      <p>
+        Para doar um pet, basta acessar a plataforma e clicar no botão
+        "Cadastrar Animal" na página inicial. Você será redirecionado para um
+        formulário onde poderá preencher as informações do pet que deseja doar.
+      </p>
+
+      {{> components/h3 text="Como faço para adotar um pet?"}}
+
+      <p>
+        Quando encontrar um pet que você gostaria de adotar, basta clicar no
+        botão "Tenho Interesse". O doador responsável pelo animal entrará em
+        contato para orientá-lo sobre o processo de adoção.
+      </p>
+    </div>
+  {{/inline}}
+{{/layouts/base}}

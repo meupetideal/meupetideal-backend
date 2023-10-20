@@ -1,8 +1,9 @@
-import { Entity } from '@core/enterprise/entity';
 import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
 import { EntityValidationError } from '@core/enterprise/errors/validation.error';
 import { PickOut } from '@core/enterprise/logic/pick-out';
+import { AggregateRoot } from '@core/enterprise/aggregate-root';
 import { PasswordRecoveryTokenValidatorFactory } from '../validators/password-recovery-token.validator';
+import { PasswordRecoveryTokenCreatedEvent } from '../events/password-recovery-token-created.event';
 
 export interface PasswordRecoveryTokenProps {
   userId: UniqueEntityId;
@@ -10,21 +11,31 @@ export interface PasswordRecoveryTokenProps {
   expiresAt: Date;
 }
 
-export class PasswordRecoveryToken extends Entity<PasswordRecoveryTokenProps> {
+export class PasswordRecoveryToken extends AggregateRoot<PasswordRecoveryTokenProps> {
   public static create(
     props: PickOut<PasswordRecoveryTokenProps, 'expiresAt'>,
     id?: UniqueEntityId,
   ): PasswordRecoveryToken {
     const expirationTime = 60 * 60 * 1000 * 2;
     const expiresAt = props.expiresAt ?? new Date(Date.now() + expirationTime);
-
     const propsWithExpiration = {
       ...props,
       expiresAt,
     };
-
     this.validate(propsWithExpiration);
-    return new PasswordRecoveryToken(propsWithExpiration, id);
+    const passwordRecoveryToken = new PasswordRecoveryToken(
+      propsWithExpiration,
+      id,
+    );
+
+    const isNew = !id;
+    if (isNew) {
+      passwordRecoveryToken.addDomainEvent(
+        new PasswordRecoveryTokenCreatedEvent(passwordRecoveryToken),
+      );
+    }
+
+    return passwordRecoveryToken;
   }
 
   get userId(): UniqueEntityId {

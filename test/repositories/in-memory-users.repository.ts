@@ -1,3 +1,4 @@
+import { DomainEvents } from '@core/enterprise/domain-events';
 import { UsersRepository } from '@domain/accounts/application/repositories/users.repository';
 import { User } from '@domain/accounts/enterprise/entities/user';
 
@@ -18,6 +19,8 @@ export class InMemoryUsersRepository implements UsersRepository {
 
   public async insert(entity: User): Promise<void> {
     this.items.push(entity);
+
+    DomainEvents.dispatchEventsForAggregate(entity.id);
   }
 
   public async save(entity: User): Promise<void> {
