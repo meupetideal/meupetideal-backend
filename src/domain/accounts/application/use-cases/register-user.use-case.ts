@@ -1,8 +1,6 @@
 import { UseCase } from '@core/application/use-case';
 import { User } from '@domain/accounts/enterprise/entities/user';
-import { UsersRepository } from '../repositories/users.repository';
-import { UserAlreadyExistsError } from './errors/user-already-exists.error';
-import { HasherGateway } from '../gateways/hasher';
+import { UsersService } from '../services/users.service';
 
 type Input = {
   name: string;
@@ -18,10 +16,7 @@ type Output = {
 };
 
 export class RegisterUserUseCase implements UseCase<Input, Output> {
-  constructor(
-    private usersRepository: UsersRepository,
-    private hasher: HasherGateway,
-  ) {}
+  constructor(private usersService: UsersService) {}
 
   async execute({
     name,
@@ -31,30 +26,14 @@ export class RegisterUserUseCase implements UseCase<Input, Output> {
     birthday,
     phoneNumber,
   }: Input): Promise<Output> {
-    let userAlreadyExists = await this.usersRepository.findByEmail(email);
-
-    if (userAlreadyExists) {
-      throw new UserAlreadyExistsError(email);
-    }
-
-    userAlreadyExists = await this.usersRepository.findByCpf(cpf);
-
-    if (userAlreadyExists) {
-      throw new UserAlreadyExistsError(cpf);
-    }
-
-    const hashedPassword = await this.hasher.hash(password);
-
-    const user = User.create({
+    const user = await this.usersService.register({
       name,
       cpf,
       email,
-      hashedPassword,
+      password,
       birthday,
       phoneNumber,
     });
-
-    await this.usersRepository.insert(user);
 
     return { user };
   }

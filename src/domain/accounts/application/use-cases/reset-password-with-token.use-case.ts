@@ -1,10 +1,7 @@
 import { UseCase } from '@core/application/use-case';
-import { UsersRepository } from '../repositories/users.repository';
-import { HasherGateway } from '../gateways/hasher';
 import { PasswordRecoveryTokensRepository } from '../repositories/password-recovery-tokens.repository';
 import { InvalidRecoveryTokenError } from './errors/invalid-recovery-token.error';
-import { UnmatchedPasswordsError } from './errors/unmatched-passwords.error';
-import { UserNotFoundError } from './errors/user-not-found.error';
+import { UsersService } from '../services/users.service';
 
 type Input = {
   token: string;
@@ -17,8 +14,7 @@ type Output = void;
 export class ResetPasswordWithTokenUseCase implements UseCase<Input, Output> {
   constructor(
     private passwordRecoveryTokensRepository: PasswordRecoveryTokensRepository,
-    private usersRepository: UsersRepository,
-    private hasher: HasherGateway,
+    private usersService: UsersService,
   ) {}
 
   async execute({
@@ -33,23 +29,11 @@ export class ResetPasswordWithTokenUseCase implements UseCase<Input, Output> {
       throw new InvalidRecoveryTokenError();
     }
 
-    if (password !== passwordConfirmation) {
-      throw new UnmatchedPasswordsError();
-    }
-
-    const user = await this.usersRepository.findById(
-      passwordRecoveryToken.userId.value,
-    );
-
-    if (!user) {
-      throw new UserNotFoundError(passwordRecoveryToken.userId.value);
-    }
-
-    const hashedPassword = await this.hasher.hash(password);
-
-    user.hashedPassword = hashedPassword;
-
-    await this.usersRepository.save(user);
+    await this.usersService.resetPassword({
+      userId: passwordRecoveryToken.userId.value,
+      password,
+      passwordConfirmation,
+    });
 
     await this.passwordRecoveryTokensRepository.delete(passwordRecoveryToken);
   }

@@ -6,10 +6,13 @@ import { UsersRepository } from '../repositories/users.repository';
 import { RegisterUserUseCase } from './register-user.use-case';
 import { HasherGateway } from '../gateways/hasher';
 import { UserAlreadyExistsError } from './errors/user-already-exists.error';
+import { UsersService } from '../services/users.service';
 
 describe('#UC01 RegisterUserUseCase', () => {
   let usersRepository: UsersRepository;
   let hasher: HasherGateway;
+
+  let usersService: UsersService;
 
   let registerUserUseCase: RegisterUserUseCase;
 
@@ -17,7 +20,9 @@ describe('#UC01 RegisterUserUseCase', () => {
     usersRepository = new InMemoryUsersRepository();
     hasher = new FakeHasher();
 
-    registerUserUseCase = new RegisterUserUseCase(usersRepository, hasher);
+    usersService = new UsersService(usersRepository, hasher);
+
+    registerUserUseCase = new RegisterUserUseCase(usersService);
   });
 
   it('should be able to register a new user', async () => {

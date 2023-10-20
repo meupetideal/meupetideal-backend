@@ -1,8 +1,8 @@
 import { UseCase } from '@core/application/use-case';
 import { User } from '@domain/accounts/enterprise/entities/user';
 import { UsersRepository } from '../repositories/users.repository';
-import { UserNotFoundError } from './errors/user-not-found.error';
 import { UserAlreadyExistsError } from './errors/user-already-exists.error';
+import { UsersService } from '../services/users.service';
 
 type Input = {
   userId: string;
@@ -16,7 +16,10 @@ type Input = {
 type Output = { user: User };
 
 export class UpdateProfileUseCase implements UseCase<Input, Output> {
-  constructor(private usersRepository: UsersRepository) {}
+  constructor(
+    private usersService: UsersService,
+    private usersRepository: UsersRepository,
+  ) {}
 
   public async execute({
     userId,
@@ -26,11 +29,7 @@ export class UpdateProfileUseCase implements UseCase<Input, Output> {
     birthday,
     phoneNumber,
   }: Input): Promise<Output> {
-    const user = await this.usersRepository.findById(userId);
-
-    if (!user) {
-      throw new UserNotFoundError(userId);
-    }
+    const user = await this.usersService.getUser(userId);
 
     if (user.email !== email) {
       const userAlreadyExists = await this.usersRepository.findByEmail(email);

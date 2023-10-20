@@ -1,22 +1,34 @@
 import { InMemoryUsersRepository } from 'test/repositories/in-memory-users.repository';
 import { FakeStorageGateway } from 'test/gateways/fake-storage';
 import { UserBuilder } from 'test/data-builders/user.builder';
+import { FakeHasher } from 'test/gateways/fake-hasher';
 import { UpdateUserAvatarUseCase } from './update-user-avatar.use-case';
 import { UserNotFoundError } from './errors/user-not-found.error';
 import { InvalidAvatarTypeError } from './errors/invalid-avatar-type.error';
 import { InvalidAvatarSizeError } from './errors/invalid-avatar-size.error';
+import { UsersService } from '../services/users.service';
 
 describe('#UC08 UpdateUserAvatarUseCase', () => {
   let usersRepository: InMemoryUsersRepository;
   let storageGateway: FakeStorageGateway;
+  let hasher: FakeHasher;
+
+  let usersService: UsersService;
 
   let sut: UpdateUserAvatarUseCase;
 
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository();
     storageGateway = new FakeStorageGateway();
+    hasher = new FakeHasher();
 
-    sut = new UpdateUserAvatarUseCase(storageGateway, usersRepository);
+    usersService = new UsersService(usersRepository, hasher);
+
+    sut = new UpdateUserAvatarUseCase(
+      storageGateway,
+      usersService,
+      usersRepository,
+    );
   });
 
   it('should be able to update an user avatar', async () => {

@@ -1,17 +1,25 @@
 import { InMemoryUsersRepository } from 'test/repositories/in-memory-users.repository';
 import { UserBuilder } from 'test/data-builders/user.builder';
+import { FakeHasher } from 'test/gateways/fake-hasher';
 import { ShowProfileUseCase } from './show-profile.use-case';
 import { UserNotFoundError } from './errors/user-not-found.error';
+import { UsersService } from '../services/users.service';
 
 describe('#UC07 ShowProfileUseCase', () => {
   let usersRepository: InMemoryUsersRepository;
+  let hasher: FakeHasher;
+
+  let usersService: UsersService;
 
   let showProfileUseCase: ShowProfileUseCase;
 
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository();
+    hasher = new FakeHasher();
 
-    showProfileUseCase = new ShowProfileUseCase(usersRepository);
+    usersService = new UsersService(usersRepository, hasher);
+
+    showProfileUseCase = new ShowProfileUseCase(usersService);
   });
 
   it('should be able to show an user profile', async () => {

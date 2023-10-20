@@ -1,18 +1,29 @@
 import { InMemoryUsersRepository } from 'test/repositories/in-memory-users.repository';
 import { UserBuilder } from 'test/data-builders/user.builder';
+import { FakeHasher } from 'test/gateways/fake-hasher';
 import { UpdateProfileUseCase } from './update-profile.use-case';
 import { UserNotFoundError } from './errors/user-not-found.error';
 import { UserAlreadyExistsError } from './errors/user-already-exists.error';
+import { UsersService } from '../services/users.service';
 
 describe('#UC06 UpdateProfileUseCase', () => {
   let usersRepository: InMemoryUsersRepository;
+  let hasher: FakeHasher;
+
+  let usersService: UsersService;
 
   let updateProfileUseCase: UpdateProfileUseCase;
 
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository();
+    hasher = new FakeHasher();
 
-    updateProfileUseCase = new UpdateProfileUseCase(usersRepository);
+    usersService = new UsersService(usersRepository, hasher);
+
+    updateProfileUseCase = new UpdateProfileUseCase(
+      usersService,
+      usersRepository,
+    );
   });
 
   it('should be able to update an user profile', async () => {

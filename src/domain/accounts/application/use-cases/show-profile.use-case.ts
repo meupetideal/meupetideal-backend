@@ -1,7 +1,6 @@
 import { UseCase } from '@core/application/use-case';
 import { User } from '@domain/accounts/enterprise/entities/user';
-import { UsersRepository } from '../repositories/users.repository';
-import { UserNotFoundError } from './errors/user-not-found.error';
+import { UsersService } from '../services/users.service';
 
 type Input = {
   userId: string;
@@ -12,14 +11,10 @@ type Output = {
 };
 
 export class ShowProfileUseCase implements UseCase<Input, Output> {
-  constructor(private usersRepository: UsersRepository) {}
+  constructor(private usersService: UsersService) {}
 
   public async execute({ userId }: Input): Promise<Output> {
-    const user = await this.usersRepository.findById(userId);
-
-    if (!user) {
-      throw new UserNotFoundError(userId);
-    }
+    const user = await this.usersService.getUser(userId);
 
     return { user };
   }

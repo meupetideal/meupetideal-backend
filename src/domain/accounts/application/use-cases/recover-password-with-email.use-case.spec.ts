@@ -5,7 +5,7 @@ import { UserBuilder } from 'test/data-builders/user.builder';
 import { PasswordRecoveryTokensRepository } from '../repositories/password-recovery-tokens.repository';
 import { UsersRepository } from '../repositories/users.repository';
 import { RecoverPasswordWithEmailUseCase } from './recover-password-with-email.use-case';
-import { UserAlreadyExistsError } from './errors/user-already-exists.error';
+import { UserNotFoundError } from './errors/user-not-found.error';
 
 describe('#UC02 RecoverPasswordWithEmailUseCase', () => {
   let usersRepository: UsersRepository;
@@ -58,6 +58,6 @@ describe('#UC02 RecoverPasswordWithEmailUseCase', () => {
 
     await expect(
       recoverPasswordWithEmailUseCase.execute(input),
-    ).rejects.toThrow(UserAlreadyExistsError);
+    ).rejects.toThrow(UserNotFoundError);
   });
 });

@@ -2,8 +2,8 @@ import { UseCase } from '@core/application/use-case';
 import { PasswordRecoveryToken } from '@domain/accounts/enterprise/entities/password-recovery-token';
 import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
 import { UsersRepository } from '../repositories/users.repository';
-import { UserAlreadyExistsError } from './errors/user-already-exists.error';
 import { PasswordRecoveryTokensRepository } from '../repositories/password-recovery-tokens.repository';
+import { UserNotFoundError } from './errors/user-not-found.error';
 
 type Input = {
   email: string;
@@ -21,7 +21,7 @@ export class RecoverPasswordWithEmailUseCase implements UseCase<Input, Output> {
     const user = await this.usersRepository.findByEmail(email);
 
     if (!user) {
-      throw new UserAlreadyExistsError(email);
+      throw new UserNotFoundError(email);
     }
 
     const passwordRecoveryToken = PasswordRecoveryToken.create({

@@ -1,8 +1,5 @@
 import { UseCase } from '@core/application/use-case';
-import { UsersRepository } from '../repositories/users.repository';
-import { HasherGateway } from '../gateways/hasher';
-import { UnmatchedPasswordsError } from './errors/unmatched-passwords.error';
-import { UserNotFoundError } from './errors/user-not-found.error';
+import { UsersService } from '../services/users.service';
 
 type Input = {
   userId: string;
@@ -15,30 +12,17 @@ type Output = void;
 export class ResetPasswordWithCurrentPasswordUseCase
   implements UseCase<Input, Output>
 {
-  constructor(
-    private usersRepository: UsersRepository,
-    private hasher: HasherGateway,
-  ) {}
+  constructor(private usersService: UsersService) {}
 
   async execute({
     userId,
     password,
     passwordConfirmation,
   }: Input): Promise<Output> {
-    const user = await this.usersRepository.findById(userId);
-
-    if (!user) {
-      throw new UserNotFoundError(userId);
-    }
-
-    if (password !== passwordConfirmation) {
-      throw new UnmatchedPasswordsError();
-    }
-
-    const hashedPassword = await this.hasher.hash(password);
-
-    user.hashedPassword = hashedPassword;
-
-    await this.usersRepository.save(user);
+    await this.usersService.resetPassword({
+      userId,
+      password,
+      passwordConfirmation,
+    });
   }
 }

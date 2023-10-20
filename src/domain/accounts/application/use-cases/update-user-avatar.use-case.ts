@@ -2,8 +2,8 @@ import { UseCase } from '@core/application/use-case';
 import { StorageGateway } from '@core/application/gateways/storage.gateway';
 import { UsersRepository } from '../repositories/users.repository';
 import { InvalidAvatarTypeError } from './errors/invalid-avatar-type.error';
-import { UserNotFoundError } from './errors/user-not-found.error';
 import { InvalidAvatarSizeError } from './errors/invalid-avatar-size.error';
+import { UsersService } from '../services/users.service';
 
 type Input = {
   userId: string;
@@ -21,6 +21,7 @@ export class UpdateUserAvatarUseCase implements UseCase<Input, Output> {
 
   constructor(
     private storage: StorageGateway,
+    private usersService: UsersService,
     private usersRepository: UsersRepository,
   ) {}
 
@@ -30,11 +31,7 @@ export class UpdateUserAvatarUseCase implements UseCase<Input, Output> {
     fileType,
     body,
   }: Input): Promise<Output> {
-    const user = await this.usersRepository.findById(userId);
-
-    if (!user) {
-      throw new UserNotFoundError(userId);
-    }
+    const user = await this.usersService.getUser(userId);
 
     if (!/^(image\/(jpeg|png))$/.test(fileType)) {
       throw new InvalidAvatarTypeError(fileType);

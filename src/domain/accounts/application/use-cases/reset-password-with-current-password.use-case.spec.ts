@@ -6,9 +6,11 @@ import { ResetPasswordWithCurrentPasswordUseCase } from './reset-password-with-c
 import { HasherGateway } from '../gateways/hasher';
 import { UnmatchedPasswordsError } from './errors/unmatched-passwords.error';
 import { UserNotFoundError } from './errors/user-not-found.error';
+import { UsersService } from '../services/users.service';
 
 describe('#UC05 ResetPasswordWithCurrentPasswordUseCase', () => {
   let usersRepository: InMemoryUsersRepository;
+  let usersService: UsersService;
   let hasher: HasherGateway;
 
   let resetPasswordWithCurrentPasswordUseCase: ResetPasswordWithCurrentPasswordUseCase;
@@ -16,12 +18,13 @@ describe('#UC05 ResetPasswordWithCurrentPasswordUseCase', () => {
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository();
     hasher = new FakeHasher();
+    usersService = new UsersService(usersRepository, hasher);
 
     resetPasswordWithCurrentPasswordUseCase =
-      new ResetPasswordWithCurrentPasswordUseCase(usersRepository, hasher);
+      new ResetPasswordWithCurrentPasswordUseCase(usersService);
   });
 
-  it('should be able to reset an user password with a token', async () => {
+  it('should be able to reset an user password with current password', async () => {
     const user = UserBuilder.create().build();
     await usersRepository.insert(user);
 
