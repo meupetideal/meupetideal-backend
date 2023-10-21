@@ -4,17 +4,22 @@ import { Report } from '@domain/adoption/enterprise/entities/report';
 import { DogBuilder } from 'test/data-builders/dog.builder';
 import { ReportIrregularAnimalUseCase } from './report-irregular-animal.use-case';
 import { AnimalNotFoundError } from './errors/animal-not-found.error';
+import { AnimalsService } from '../services/animals.service';
 
 describe('#UC213 ReportIrregularAnimalUseCase', () => {
   let animalsRepository: InMemoryAnimalsRepository;
+
+  let animalsService: AnimalsService;
 
   let reportIrregularAnimalUseCase: ReportIrregularAnimalUseCase;
 
   beforeEach(() => {
     animalsRepository = new InMemoryAnimalsRepository();
 
+    animalsService = new AnimalsService(animalsRepository);
+
     reportIrregularAnimalUseCase = new ReportIrregularAnimalUseCase(
-      animalsRepository,
+      animalsService,
     );
   });
 

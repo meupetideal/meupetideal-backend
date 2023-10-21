@@ -5,16 +5,21 @@ import { Cat } from '@domain/adoption/enterprise/entities/cat';
 import { DogBuilder } from 'test/data-builders/dog.builder';
 import { ShowAnimalDetailsUseCase } from './show-animal-details.use-case';
 import { AnimalNotFoundError } from './errors/animal-not-found.error';
+import { AnimalsService } from '../services/animals.service';
 
 describe('#UC22 ShowAnimalDetailsUseCase', () => {
   let animalsRepository: InMemoryAnimalsRepository;
+
+  let animalsService: AnimalsService;
 
   let showAnimalDetailsUseCase: ShowAnimalDetailsUseCase;
 
   beforeEach(() => {
     animalsRepository = new InMemoryAnimalsRepository();
 
-    showAnimalDetailsUseCase = new ShowAnimalDetailsUseCase(animalsRepository);
+    animalsService = new AnimalsService(animalsRepository);
+
+    showAnimalDetailsUseCase = new ShowAnimalDetailsUseCase(animalsService);
   });
 
   it('should show animal details', async () => {

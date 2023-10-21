@@ -7,9 +7,9 @@ import { AnimalSize } from '@domain/adoption/enterprise/entities/value-objects/a
 import { AnimalTemperament } from '@domain/adoption/enterprise/entities/value-objects/animal-temperament.vo';
 import { AnimalCoatColor } from '@domain/adoption/enterprise/entities/value-objects/animal-coat-color.vo';
 import { AnimalFactory } from '@domain/adoption/enterprise/entities/factories/animal.factory';
-import { AnimalNotFoundError } from './errors/animal-not-found.error';
 import { AnimalsRepository } from '../repositories/animals.repository';
 import { UserNotOwnsTheAnimalError } from './errors/user-not-owns-the-animal.error';
+import { AnimalsService } from '../services/animals.service';
 
 type Input = {
   animalId: string;
@@ -33,7 +33,10 @@ type Output = {
 };
 
 export class UpdateAnimalDetailsUseCase implements UseCase<Input, Output> {
-  constructor(private animalsRepository: AnimalsRepository) {}
+  constructor(
+    private animalsService: AnimalsService,
+    private animalsRepository: AnimalsRepository,
+  ) {}
 
   public async execute({
     animalId,
@@ -51,11 +54,7 @@ export class UpdateAnimalDetailsUseCase implements UseCase<Input, Output> {
     isSpecialNeeds,
     breed,
   }: Input): Promise<Output> {
-    const animal = await this.animalsRepository.findById(animalId);
-
-    if (!animal) {
-      throw new AnimalNotFoundError(animalId);
-    }
+    const animal = await this.animalsService.getAnimal(animalId);
 
     const ownerUniqueEntityId = UniqueEntityId.create(ownerId);
 

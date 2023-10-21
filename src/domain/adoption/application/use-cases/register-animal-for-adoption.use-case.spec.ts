@@ -2,17 +2,22 @@ import { InMemoryAnimalsRepository } from 'test/repositories/in-memory-animals.r
 import { Dog } from '@domain/adoption/enterprise/entities/dog';
 import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
 import { RegisterAnimalForAdoptionUseCase } from './register-animal-for-adoption.use-case';
+import { AnimalsService } from '../services/animals.service';
 
 describe('#UC20 RegisterAnimalForAdoptionUseCase', () => {
   let animalsRepository: InMemoryAnimalsRepository;
+
+  let animalsService: AnimalsService;
 
   let registerAnimalForAdoptionUseCase: RegisterAnimalForAdoptionUseCase;
 
   beforeEach(() => {
     animalsRepository = new InMemoryAnimalsRepository();
 
+    animalsService = new AnimalsService(animalsRepository);
+
     registerAnimalForAdoptionUseCase = new RegisterAnimalForAdoptionUseCase(
-      animalsRepository,
+      animalsService,
     );
   });
 

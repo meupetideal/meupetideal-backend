@@ -1,8 +1,7 @@
 import { UseCase } from '@core/application/use-case';
 import { Report } from '@domain/adoption/enterprise/entities/report';
 import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
-import { AnimalsRepository } from '../repositories/animals.repository';
-import { AnimalNotFoundError } from './errors/animal-not-found.error';
+import { AnimalsService } from '../services/animals.service';
 
 type Input = {
   reporterId: string;
@@ -13,18 +12,14 @@ type Input = {
 type Output = void;
 
 export class ReportIrregularAnimalUseCase implements UseCase<Input, Output> {
-  constructor(private animalsRepository: AnimalsRepository) {}
+  constructor(private animalsService: AnimalsService) {}
 
   public async execute({
     reporterId,
     animalId,
     reason,
   }: Input): Promise<Output> {
-    const animal = await this.animalsRepository.findById(animalId);
-
-    if (!animal) {
-      throw new AnimalNotFoundError(animalId);
-    }
+    const animal = await this.animalsService.getAnimal(animalId);
 
     Report.create({
       reporterId: UniqueEntityId.create(reporterId),

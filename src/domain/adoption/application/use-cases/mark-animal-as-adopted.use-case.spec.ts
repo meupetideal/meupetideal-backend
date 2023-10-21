@@ -7,18 +7,23 @@ import { Dog } from '@domain/adoption/enterprise/entities/dog';
 import { MarkAnimalAsAdoptedUseCase } from './mark-animal-as-adopted.use-case';
 import { AnimalNotFoundError } from './errors/animal-not-found.error';
 import { UserNotOwnsTheAnimalError } from './errors/user-not-owns-the-animal.error';
+import { AnimalsService } from '../services/animals.service';
 
 describe('#UC15 MarkAnimalAsAdoptedUseCase', () => {
   let animalsRepository: InMemoryAnimalsRepository;
   let usersRepository: InMemoryUsersRepository;
+
+  let animalsService: AnimalsService;
 
   let markAnimalAsAdoptedUseCase: MarkAnimalAsAdoptedUseCase;
 
   beforeEach(() => {
     animalsRepository = new InMemoryAnimalsRepository();
     usersRepository = new InMemoryUsersRepository();
+    animalsService = new AnimalsService(animalsRepository);
 
     markAnimalAsAdoptedUseCase = new MarkAnimalAsAdoptedUseCase(
+      animalsService,
       animalsRepository,
     );
   });

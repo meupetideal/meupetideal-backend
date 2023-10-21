@@ -1,8 +1,7 @@
 import { UseCase } from '@core/application/use-case';
-import { AnimalFactory } from '@domain/adoption/enterprise/entities/factories/animal.factory';
 import { Cat } from '@domain/adoption/enterprise/entities/cat';
 import { Dog } from '@domain/adoption/enterprise/entities/dog';
-import { AnimalsRepository } from '../repositories/animals.repository';
+import { AnimalsService } from '../services/animals.service';
 
 type Input = {
   species: 'dog' | 'cat';
@@ -28,7 +27,7 @@ type Output = {
 export class RegisterAnimalForAdoptionUseCase
   implements UseCase<Input, Output>
 {
-  constructor(private animalsRepository: AnimalsRepository) {}
+  constructor(private animalsService: AnimalsService) {}
 
   public async execute({
     species,
@@ -46,7 +45,8 @@ export class RegisterAnimalForAdoptionUseCase
     isSpecialNeeds,
     breed,
   }: Input): Promise<Output> {
-    const animal = AnimalFactory.create(species, {
+    const animal = await this.animalsService.register({
+      species,
       ownerId,
       name,
       gender,
@@ -61,8 +61,6 @@ export class RegisterAnimalForAdoptionUseCase
       isSpecialNeeds,
       breed,
     });
-
-    await this.animalsRepository.insert(animal);
 
     return { animal };
   }

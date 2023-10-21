@@ -1,8 +1,7 @@
 import { UseCase } from '@core/application/use-case';
 import { Cat } from '@domain/adoption/enterprise/entities/cat';
 import { Dog } from '@domain/adoption/enterprise/entities/dog';
-import { AnimalsRepository } from '../repositories/animals.repository';
-import { AnimalNotFoundError } from './errors/animal-not-found.error';
+import { AnimalsService } from '../services/animals.service';
 
 type Input = {
   animalId: string;
@@ -13,14 +12,10 @@ type Output = {
 };
 
 export class ShowAnimalDetailsUseCase implements UseCase<Input, Output> {
-  constructor(private animalsRepository: AnimalsRepository) {}
+  constructor(private animalsService: AnimalsService) {}
 
   public async execute({ animalId }: Input): Promise<Output> {
-    const animal = await this.animalsRepository.findById(animalId);
-
-    if (!animal) {
-      throw new AnimalNotFoundError(animalId);
-    }
+    const animal = await this.animalsService.getAnimal(animalId);
 
     return { animal };
   }

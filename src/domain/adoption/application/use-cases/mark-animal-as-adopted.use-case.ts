@@ -2,9 +2,9 @@ import { UseCase } from '@core/application/use-case';
 import { Cat } from '@domain/adoption/enterprise/entities/cat';
 import { Dog } from '@domain/adoption/enterprise/entities/dog';
 import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
-import { AnimalNotFoundError } from './errors/animal-not-found.error';
 import { AnimalsRepository } from '../repositories/animals.repository';
 import { UserNotOwnsTheAnimalError } from './errors/user-not-owns-the-animal.error';
+import { AnimalsService } from '../services/animals.service';
 
 type Input = {
   animalId: string;
@@ -16,14 +16,13 @@ type Output = {
 };
 
 export class MarkAnimalAsAdoptedUseCase implements UseCase<Input, Output> {
-  constructor(private animalsRepository: AnimalsRepository) {}
+  constructor(
+    private animalsService: AnimalsService,
+    private animalsRepository: AnimalsRepository,
+  ) {}
 
   public async execute({ animalId, ownerId }: Input): Promise<Output> {
-    const animal = await this.animalsRepository.findById(animalId);
-
-    if (!animal) {
-      throw new AnimalNotFoundError(animalId);
-    }
+    const animal = await this.animalsService.getAnimal(animalId);
 
     const ownerUniqueEntityId = UniqueEntityId.create(ownerId);
 

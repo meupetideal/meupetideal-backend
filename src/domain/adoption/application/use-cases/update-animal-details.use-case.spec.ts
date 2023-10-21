@@ -7,10 +7,13 @@ import { Dog } from '@domain/adoption/enterprise/entities/dog';
 import { UpdateAnimalDetailsUseCase } from './update-animal-details.use-case';
 import { AnimalNotFoundError } from './errors/animal-not-found.error';
 import { UserNotOwnsTheAnimalError } from './errors/user-not-owns-the-animal.error';
+import { AnimalsService } from '../services/animals.service';
 
 describe('#UC14 UpdateAnimalDetailsUseCase', () => {
   let animalsRepository: InMemoryAnimalsRepository;
   let usersRepository: InMemoryUsersRepository;
+
+  let animalsService: AnimalsService;
 
   let updateAnimalDetailsUseCase: UpdateAnimalDetailsUseCase;
 
@@ -18,7 +21,10 @@ describe('#UC14 UpdateAnimalDetailsUseCase', () => {
     animalsRepository = new InMemoryAnimalsRepository();
     usersRepository = new InMemoryUsersRepository();
 
+    animalsService = new AnimalsService(animalsRepository);
+
     updateAnimalDetailsUseCase = new UpdateAnimalDetailsUseCase(
+      animalsService,
       animalsRepository,
     );
   });

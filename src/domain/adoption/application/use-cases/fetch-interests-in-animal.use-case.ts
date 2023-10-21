@@ -2,9 +2,8 @@ import { UseCase } from '@core/application/use-case';
 import { Interest } from '@domain/adoption/enterprise/entities/interest';
 import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
 import { InterestsRepository } from '../repositories/interests.repository';
-import { AnimalsRepository } from '../repositories/animals.repository';
-import { AnimalNotFoundError } from './errors/animal-not-found.error';
 import { UserNotOwnsTheAnimalError } from './errors/user-not-owns-the-animal.error';
+import { AnimalsService } from '../services/animals.service';
 
 type Input = {
   ownerId: string;
@@ -17,16 +16,12 @@ type Output = {
 
 export class FetchInterestsInAnimalUseCase implements UseCase<Input, Output> {
   constructor(
-    private animalsRepository: AnimalsRepository,
+    private animalsService: AnimalsService,
     private interestsRepository: InterestsRepository,
   ) {}
 
   public async execute({ ownerId, animalId }: Input): Promise<Output> {
-    const animal = await this.animalsRepository.findById(animalId);
-
-    if (!animal) {
-      throw new AnimalNotFoundError(animalId);
-    }
+    const animal = await this.animalsService.getAnimal(animalId);
 
     if (!animal.ownerId.equals(UniqueEntityId.create(ownerId))) {
       throw new UserNotOwnsTheAnimalError(ownerId, animal.name);

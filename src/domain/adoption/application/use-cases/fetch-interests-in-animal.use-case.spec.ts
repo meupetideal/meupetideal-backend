@@ -5,10 +5,13 @@ import { InMemoryAnimalsRepository } from 'test/repositories/in-memory-animals.r
 import { FetchInterestsInAnimalUseCase } from './fetch-interests-in-animal.use-case';
 import { AnimalNotFoundError } from './errors/animal-not-found.error';
 import { UserNotOwnsTheAnimalError } from './errors/user-not-owns-the-animal.error';
+import { AnimalsService } from '../services/animals.service';
 
 describe('#UC21 FetchInterestsInAnimalUseCase', () => {
   let interestsRepository: InMemoryInterestsRepository;
   let animalsRepository: InMemoryAnimalsRepository;
+
+  let animalsService: AnimalsService;
 
   let sut: FetchInterestsInAnimalUseCase;
 
@@ -16,8 +19,10 @@ describe('#UC21 FetchInterestsInAnimalUseCase', () => {
     interestsRepository = new InMemoryInterestsRepository();
     animalsRepository = new InMemoryAnimalsRepository();
 
+    animalsService = new AnimalsService(animalsRepository);
+
     sut = new FetchInterestsInAnimalUseCase(
-      animalsRepository,
+      animalsService,
       interestsRepository,
     );
   });

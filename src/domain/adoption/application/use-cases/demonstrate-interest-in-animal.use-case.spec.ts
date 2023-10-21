@@ -9,10 +9,13 @@ import { AnimalNotFoundError } from './errors/animal-not-found.error';
 import { AnimalIsUnavailableError } from './errors/animal-is-unavailable.error';
 import { UserIsAnimalOwnerError } from './errors/user-is-animal-owner.error';
 import { InterestAlreadyDemonstratedError } from './errors/interest-already-demonstrated.error';
+import { AnimalsService } from '../services/animals.service';
 
 describe('#UC16 DemonstrateInterestInAnimalUseCase', () => {
   let animalsRepository: InMemoryAnimalsRepository;
   let interestsRepository: InMemoryInterestsRepository;
+
+  let animalsService: AnimalsService;
 
   let sut: DemonstrateInterestInAnimalUseCase;
 
@@ -20,8 +23,10 @@ describe('#UC16 DemonstrateInterestInAnimalUseCase', () => {
     animalsRepository = new InMemoryAnimalsRepository();
     interestsRepository = new InMemoryInterestsRepository();
 
+    animalsService = new AnimalsService(animalsRepository);
+
     sut = new DemonstrateInterestInAnimalUseCase(
-      animalsRepository,
+      animalsService,
       interestsRepository,
     );
   });
