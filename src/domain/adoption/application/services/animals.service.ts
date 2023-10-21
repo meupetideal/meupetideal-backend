@@ -2,8 +2,10 @@ import { Service } from '@core/application/service';
 import { Dog } from '@domain/adoption/enterprise/entities/dog';
 import { Cat } from '@domain/adoption/enterprise/entities/cat';
 import { AnimalFactory } from '@domain/adoption/enterprise/entities/factories/animal.factory';
+import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
 import { AnimalsRepository } from '../repositories/animals.repository';
 import { AnimalNotFoundError } from '../use-cases/errors/animal-not-found.error';
+import { UserNotOwnsTheAnimalError } from '../use-cases/errors/user-not-owns-the-animal.error';
 
 interface RegisterAnimalInput {
   species: 'dog' | 'cat';
@@ -30,6 +32,19 @@ export class AnimalsService implements Service {
 
     if (!animal) {
       throw new AnimalNotFoundError(animalId);
+    }
+
+    return animal;
+  }
+
+  public async getOwnerAnimal(
+    animalId: string,
+    ownerId: string,
+  ): Promise<Dog | Cat> {
+    const animal = await this.getAnimal(animalId);
+
+    if (!animal.ownerId.equals(UniqueEntityId.create(ownerId))) {
+      throw new UserNotOwnsTheAnimalError(ownerId, animalId);
     }
 
     return animal;

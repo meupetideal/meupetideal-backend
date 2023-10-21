@@ -1,8 +1,6 @@
 import { UseCase } from '@core/application/use-case';
 import { Interest } from '@domain/adoption/enterprise/entities/interest';
-import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
 import { InterestsRepository } from '../repositories/interests.repository';
-import { UserNotOwnsTheAnimalError } from './errors/user-not-owns-the-animal.error';
 import { AnimalsService } from '../services/animals.service';
 
 type Input = {
@@ -21,14 +19,11 @@ export class FetchInterestsInAnimalUseCase implements UseCase<Input, Output> {
   ) {}
 
   public async execute({ ownerId, animalId }: Input): Promise<Output> {
-    const animal = await this.animalsService.getAnimal(animalId);
+    const animal = await this.animalsService.getOwnerAnimal(animalId, ownerId);
 
-    if (!animal.ownerId.equals(UniqueEntityId.create(ownerId))) {
-      throw new UserNotOwnsTheAnimalError(ownerId, animal.name);
-    }
-
-    const interests =
-      await this.interestsRepository.findAllByAnimalId(animalId);
+    const interests = await this.interestsRepository.findAllByAnimalId(
+      animal.id.value,
+    );
 
     return { interests };
   }

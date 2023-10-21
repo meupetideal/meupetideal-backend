@@ -1,14 +1,12 @@
 import { UseCase } from '@core/application/use-case';
 import { Cat } from '@domain/adoption/enterprise/entities/cat';
 import { Dog } from '@domain/adoption/enterprise/entities/dog';
-import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
 import { AnimalGender } from '@domain/adoption/enterprise/entities/value-objects/animal-gender.vo';
 import { AnimalSize } from '@domain/adoption/enterprise/entities/value-objects/animal-size.vo';
 import { AnimalTemperament } from '@domain/adoption/enterprise/entities/value-objects/animal-temperament.vo';
 import { AnimalCoatColor } from '@domain/adoption/enterprise/entities/value-objects/animal-coat-color.vo';
 import { AnimalFactory } from '@domain/adoption/enterprise/entities/factories/animal.factory';
 import { AnimalsRepository } from '../repositories/animals.repository';
-import { UserNotOwnsTheAnimalError } from './errors/user-not-owns-the-animal.error';
 import { AnimalsService } from '../services/animals.service';
 
 type Input = {
@@ -54,13 +52,7 @@ export class UpdateAnimalDetailsUseCase implements UseCase<Input, Output> {
     isSpecialNeeds,
     breed,
   }: Input): Promise<Output> {
-    const animal = await this.animalsService.getAnimal(animalId);
-
-    const ownerUniqueEntityId = UniqueEntityId.create(ownerId);
-
-    if (!animal.ownerId.equals(ownerUniqueEntityId)) {
-      throw new UserNotOwnsTheAnimalError(ownerId, animal.name);
-    }
+    const animal = await this.animalsService.getOwnerAnimal(animalId, ownerId);
 
     animal.name = name;
     animal.gender = AnimalGender.create(gender);
