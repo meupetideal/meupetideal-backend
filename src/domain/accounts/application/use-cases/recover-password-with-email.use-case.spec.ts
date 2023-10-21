@@ -6,10 +6,13 @@ import { PasswordRecoveryTokensRepository } from '../repositories/password-recov
 import { UsersRepository } from '../repositories/users.repository';
 import { RecoverPasswordWithEmailUseCase } from './recover-password-with-email.use-case';
 import { UserNotFoundError } from './errors/user-not-found.error';
+import { PasswordRecoveryTokensService } from '../services/password-recovery-tokens.service';
 
 describe('#UC02 RecoverPasswordWithEmailUseCase', () => {
   let usersRepository: UsersRepository;
   let passwordRecoveryTokensRepository: PasswordRecoveryTokensRepository;
+
+  let passwordRecoveryTokensService: PasswordRecoveryTokensService;
 
   let recoverPasswordWithEmailUseCase: RecoverPasswordWithEmailUseCase;
 
@@ -18,9 +21,13 @@ describe('#UC02 RecoverPasswordWithEmailUseCase', () => {
     passwordRecoveryTokensRepository =
       new InMemoryPasswordRecoveryTokensRepository();
 
-    recoverPasswordWithEmailUseCase = new RecoverPasswordWithEmailUseCase(
-      usersRepository,
+    passwordRecoveryTokensService = new PasswordRecoveryTokensService(
       passwordRecoveryTokensRepository,
+    );
+
+    recoverPasswordWithEmailUseCase = new RecoverPasswordWithEmailUseCase(
+      passwordRecoveryTokensService,
+      usersRepository,
     );
   });
 

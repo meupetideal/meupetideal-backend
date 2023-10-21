@@ -12,12 +12,15 @@ import { InvalidRecoveryTokenError } from './errors/invalid-recovery-token.error
 import { UnmatchedPasswordsError } from './errors/unmatched-passwords.error';
 import { UserNotFoundError } from './errors/user-not-found.error';
 import { UsersService } from '../services/users.service';
+import { PasswordRecoveryTokensService } from '../services/password-recovery-tokens.service';
 
 describe('#UC04 ResetPasswordWithTokenUseCase', () => {
   let usersRepository: InMemoryUsersRepository;
   let passwordRecoveryTokensRepository: InMemoryPasswordRecoveryTokensRepository;
   let hasher: HasherGateway;
   let usersService: UsersService;
+
+  let passwordRecoveryTokensService: PasswordRecoveryTokensService;
 
   let resetPasswordWithTokenUseCase: ResetPasswordWithTokenUseCase;
 
@@ -28,7 +31,12 @@ describe('#UC04 ResetPasswordWithTokenUseCase', () => {
     hasher = new FakeHasher();
     usersService = new UsersService(usersRepository, hasher);
 
+    passwordRecoveryTokensService = new PasswordRecoveryTokensService(
+      passwordRecoveryTokensRepository,
+    );
+
     resetPasswordWithTokenUseCase = new ResetPasswordWithTokenUseCase(
+      passwordRecoveryTokensService,
       passwordRecoveryTokensRepository,
       usersService,
     );

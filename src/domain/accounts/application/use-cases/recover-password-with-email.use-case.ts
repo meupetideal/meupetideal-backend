@@ -1,9 +1,7 @@
 import { UseCase } from '@core/application/use-case';
-import { PasswordRecoveryToken } from '@domain/accounts/enterprise/entities/password-recovery-token';
-import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
-import { UsersRepository } from '../repositories/users.repository';
-import { PasswordRecoveryTokensRepository } from '../repositories/password-recovery-tokens.repository';
+import { PasswordRecoveryTokensService } from '../services/password-recovery-tokens.service';
 import { UserNotFoundError } from './errors/user-not-found.error';
+import { UsersRepository } from '../repositories/users.repository';
 
 type Input = {
   email: string;
@@ -13,8 +11,8 @@ type Output = void;
 
 export class RecoverPasswordWithEmailUseCase implements UseCase<Input, Output> {
   constructor(
+    private passwordRecoveryTokensService: PasswordRecoveryTokensService,
     private usersRepository: UsersRepository,
-    private passwordRecoveryTokensRepository: PasswordRecoveryTokensRepository,
   ) {}
 
   public async execute({ email }: Input): Promise<Output> {
@@ -24,11 +22,6 @@ export class RecoverPasswordWithEmailUseCase implements UseCase<Input, Output> {
       throw new UserNotFoundError(email);
     }
 
-    const passwordRecoveryToken = PasswordRecoveryToken.create({
-      userId: user.id,
-      token: UniqueEntityId.create(),
-    });
-
-    await this.passwordRecoveryTokensRepository.insert(passwordRecoveryToken);
+    await this.passwordRecoveryTokensService.register({ userId: user.id });
   }
 }
