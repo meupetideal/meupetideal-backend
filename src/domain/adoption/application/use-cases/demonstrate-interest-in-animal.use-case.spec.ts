@@ -10,10 +10,13 @@ import { AnimalIsUnavailableError } from './errors/animal-is-unavailable.error';
 import { UserIsAnimalOwnerError } from './errors/user-is-animal-owner.error';
 import { InterestAlreadyDemonstratedError } from './errors/interest-already-demonstrated.error';
 import { AnimalsService } from '../services/animals.service';
+import { InterestsService } from '../services/interests.service';
 
 describe('#UC16 DemonstrateInterestInAnimalUseCase', () => {
   let animalsRepository: InMemoryAnimalsRepository;
   let interestsRepository: InMemoryInterestsRepository;
+
+  let interestsService: InterestsService;
 
   let animalsService: AnimalsService;
 
@@ -23,11 +26,12 @@ describe('#UC16 DemonstrateInterestInAnimalUseCase', () => {
     animalsRepository = new InMemoryAnimalsRepository();
     interestsRepository = new InMemoryInterestsRepository();
 
+    interestsService = new InterestsService(interestsRepository);
     animalsService = new AnimalsService(animalsRepository);
 
     sut = new DemonstrateInterestInAnimalUseCase(
       animalsService,
-      interestsRepository,
+      interestsService,
     );
   });
 
