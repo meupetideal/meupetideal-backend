@@ -1,5 +1,6 @@
 import { Service } from '@core/application/service';
 import { User } from '@domain/accounts/enterprise/entities/user';
+import { inject, injectable } from 'tsyringe';
 import { UnmatchedPasswordsError } from '../use-cases/errors/unmatched-passwords.error';
 import { UserNotFoundError } from '../use-cases/errors/user-not-found.error';
 import { HasherGateway } from '../gateways/hasher';
@@ -21,9 +22,12 @@ type ResetPasswordInput = {
   passwordConfirmation: string;
 };
 
+@injectable()
 export class UsersService implements Service {
   constructor(
+    @inject('UsersRepository')
     private usersRepository: UsersRepository,
+    @inject('HasherGateway')
     private hasher: HasherGateway,
   ) {}
 

@@ -1,4 +1,7 @@
+import 'reflect-metadata';
 import { ServerFactory } from './http/server';
+
+import './module';
 
 async function bootstrap() {
   const app = await ServerFactory.create();
@@ -7,5 +10,4 @@ async function bootstrap() {
 
   await app.listen(port);
 }
-
 bootstrap();
