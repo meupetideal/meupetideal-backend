@@ -13,11 +13,12 @@ import { MailtrapMail } from './gateways/mailtrap-mail';
 import { DiskStorage } from './gateways/disk-storage';
 
 // Repositories
-container.register('PrismaService', { useClass: PrismaService });
-container.register('UsersRepository', { useClass: PrismaUsersRepository });
-container.register('PasswordRecoveryTokensRepository', {
-  useClass: PrismaPasswordRecoveryTokensRepository,
-});
+container.registerSingleton('PrismaService', PrismaService);
+container.registerSingleton('UsersRepository', PrismaUsersRepository);
+container.registerSingleton(
+  'PasswordRecoveryTokensRepository',
+  PrismaPasswordRecoveryTokensRepository,
+);
 
 // Gateways
 container.registerSingleton('HasherGateway', BcryptHasher);
