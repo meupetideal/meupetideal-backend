@@ -1,6 +1,7 @@
 import { PasswordRecoveryTokensRepository } from '@domain/accounts/application/repositories/password-recovery-tokens.repository';
 import { PasswordRecoveryToken } from '@domain/accounts/enterprise/entities/password-recovery-token';
 import { inject, injectable } from 'tsyringe';
+import { DomainEvents } from '@core/enterprise/domain-events';
 import { PrismaService } from '../prisma.service';
 import { PrismaPasswordRecoveryTokenMapper } from '../mappers/prisma-password-recovery-token.mapper';
 
@@ -30,6 +31,8 @@ export class PrismaPasswordRecoveryTokensRepository
     await this.prismaService.passwordRecoveryToken.create({
       data: PrismaPasswordRecoveryTokenMapper.toPrisma(entity),
     });
+
+    DomainEvents.dispatchEventsForAggregate(entity.id);
   }
 
   public async delete(entity: PasswordRecoveryToken): Promise<void> {

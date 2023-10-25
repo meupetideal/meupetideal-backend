@@ -1,4 +1,5 @@
 import { Service } from '@core/application/service';
+import { inject, injectable } from 'tsyringe';
 import { MailGateway } from '../gateways/mail';
 import { MailTemplateGateway } from '../gateways/mail-template';
 
@@ -16,9 +17,12 @@ interface SendWithTemplateInput {
   variables: Record<string, unknown>;
 }
 
+@injectable()
 export class MailService implements Service {
   constructor(
+    @inject('MailGateway')
     private mailGateway: MailGateway,
+    @inject('MailTemplateGateway')
     private mailTemplateGateway: MailTemplateGateway,
   ) {}
 

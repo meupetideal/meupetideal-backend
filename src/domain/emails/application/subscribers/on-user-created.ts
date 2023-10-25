@@ -1,10 +1,15 @@
 import { EventHandler } from '@core/application/event-handler';
 import { DomainEvents } from '@core/enterprise/domain-events';
 import { UserCreatedEvent } from '@domain/accounts/enterprise/events/user-created.event';
+import { inject, injectable } from 'tsyringe';
 import { MailService } from '../services/mail.service';
 
+@injectable()
 export class OnUserCreated implements EventHandler {
-  constructor(private mailService: MailService) {
+  constructor(
+    @inject('MailService')
+    private mailService: MailService,
+  ) {
     this.setupSubscriptions();
   }
 

@@ -1,4 +1,5 @@
 import { UseCase } from '@core/application/use-case';
+import { inject, injectable } from 'tsyringe';
 import { UsersRepository } from '../repositories/users.repository';
 import { HasherGateway } from '../gateways/hasher';
 import { WrongCredentialsError } from './errors/wrong-credentials.error';
@@ -11,10 +12,14 @@ interface Input {
 
 type Output = { accessToken: string };
 
+@injectable()
 export class AuthenticateUserUseCase implements UseCase<Input, Output> {
   constructor(
+    @inject('UsersRepository')
     private usersRepository: UsersRepository,
+    @inject('HasherGateway')
     private hasher: HasherGateway,
+    @inject('EncrypterGateway')
     private encrypter: EncrypterGateway,
   ) {}
 

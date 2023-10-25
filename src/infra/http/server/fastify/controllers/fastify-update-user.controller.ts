@@ -1,27 +1,24 @@
-import { RegisterUserUseCase } from '@domain/accounts/application/use-cases/register-user.use-case';
+import { UpdateProfileUseCase } from '@domain/accounts/application/use-cases/update-profile.use-case';
 import { FastifyReply, FastifyRequest } from 'fastify';
-
 import { HttpUserPresenter } from 'src/infra/http/presenters/http-user.presenter';
 import { container } from 'tsyringe';
 
-export class FastifyRegisterUserController {
+export class FastifyUpdateProfileController {
   public async handle(request: FastifyRequest, reply: FastifyReply) {
-    const { name, cpf, email, password, birthday, phoneNumber } =
-      request.body as any;
+    const userId = request.user.id;
+    const { name, cpf, email, birthday, phoneNumber } = request.body as any;
 
-    const useCase = container.resolve(RegisterUserUseCase);
+    const useCase = container.resolve(UpdateProfileUseCase);
 
     const output = await useCase.execute({
+      userId,
       name,
       cpf,
       email,
-      password,
       birthday: new Date(birthday),
       phoneNumber,
     });
 
-    return reply.send({
-      user: HttpUserPresenter.toHttp(output.user),
-    });
+    return reply.send(HttpUserPresenter.toHttp(output.user));
   }
 }

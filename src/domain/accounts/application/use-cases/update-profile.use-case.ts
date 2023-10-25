@@ -1,5 +1,6 @@
 import { UseCase } from '@core/application/use-case';
 import { User } from '@domain/accounts/enterprise/entities/user';
+import { inject, injectable } from 'tsyringe';
 import { UsersRepository } from '../repositories/users.repository';
 import { UserAlreadyExistsError } from './errors/user-already-exists.error';
 import { UsersService } from '../services/users.service';
@@ -15,9 +16,12 @@ type Input = {
 
 type Output = { user: User };
 
+@injectable()
 export class UpdateProfileUseCase implements UseCase<Input, Output> {
   constructor(
+    @inject('UsersService')
     private usersService: UsersService,
+    @inject('UsersRepository')
     private usersRepository: UsersRepository,
   ) {}
 

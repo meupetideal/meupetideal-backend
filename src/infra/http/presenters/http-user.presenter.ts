@@ -9,7 +9,7 @@ export class HttpUserPresenter {
       email: user.email,
       birthday: user.birthday,
       phoneNumber: user.phoneNumber,
-      avatarUrl: user.avatarUrl,
+      avatarUrl: user.avatarUrl ?? null,
     };
   }
 }

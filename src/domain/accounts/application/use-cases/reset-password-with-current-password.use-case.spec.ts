@@ -21,11 +21,13 @@ describe('#UC05 ResetPasswordWithCurrentPasswordUseCase', () => {
     usersService = new UsersService(usersRepository, hasher);
 
     resetPasswordWithCurrentPasswordUseCase =
-      new ResetPasswordWithCurrentPasswordUseCase(usersService);
+      new ResetPasswordWithCurrentPasswordUseCase(usersService, hasher);
   });
 
   it('should be able to reset an user password with current password', async () => {
-    const user = UserBuilder.create().build();
+    const user = UserBuilder.create()
+      .withHashedPassword('old-password-hashed')
+      .build();
     await usersRepository.insert(user);
 
     const spyFindById = vi.spyOn(usersRepository, 'findById');
@@ -34,6 +36,7 @@ describe('#UC05 ResetPasswordWithCurrentPasswordUseCase', () => {
 
     const input = {
       userId: user.id.value,
+      oldPassword: 'old-password',
       password: 'new-password',
       passwordConfirmation: 'new-password',
     };
@@ -42,7 +45,7 @@ describe('#UC05 ResetPasswordWithCurrentPasswordUseCase', () => {
       resetPasswordWithCurrentPasswordUseCase.execute(input),
     ).resolves.not.toThrowError();
 
-    expect(spyFindById).toHaveBeenCalledOnce();
+    expect(spyFindById).toHaveBeenCalledTimes(2);
     expect(spyUpdate).toHaveBeenCalledWith(expect.any(User));
     expect(spyHash).toHaveBeenCalledWith(input.password);
 
@@ -50,11 +53,14 @@ describe('#UC05 ResetPasswordWithCurrentPasswordUseCase', () => {
   });
 
   it('should throw an error if the passwords do not match', async () => {
-    const user = UserBuilder.create().build();
+    const user = UserBuilder.create()
+      .withHashedPassword('old-password-hashed')
+      .build();
     await usersRepository.insert(user);
 
     const input = {
       userId: user.id.value,
+      oldPassword: 'old-password',
       password: 'new-password',
       passwordConfirmation: 'another-new-password',
     };
@@ -67,6 +73,7 @@ describe('#UC05 ResetPasswordWithCurrentPasswordUseCase', () => {
   it('should throw an error if the user is not found', async () => {
     const input = {
       userId: 'non-existent-user-id',
+      oldPassword: 'old-password',
       password: 'new-password',
       passwordConfirmation: 'new-password',
     };

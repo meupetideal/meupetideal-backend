@@ -1,6 +1,7 @@
 import { UsersRepository } from '@domain/accounts/application/repositories/users.repository';
 import { User } from '@domain/accounts/enterprise/entities/user';
 import { inject, injectable } from 'tsyringe';
+import { DomainEvents } from '@core/enterprise/domain-events';
 import { PrismaService } from '../prisma.service';
 import { PrismaUserMapper } from '../mappers/prisma-user.mapper';
 
@@ -45,6 +46,8 @@ export class PrismaUsersRepository implements UsersRepository {
     await this.prismaService.user.create({
       data: PrismaUserMapper.toPrisma(entity),
     });
+
+    DomainEvents.dispatchEventsForAggregate(entity.id);
   }
 
   public async save(entity: User): Promise<void> {

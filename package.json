@@ -15,15 +15,22 @@
   },
   "author": "Gustavo Amaral",
   "dependencies": {
+    "@fastify/auth": "^4.3.0",
+    "@fastify/multipart": "^8.0.0",
     "@prisma/client": "5.4.2",
     "bcrypt": "^5.1.1",
     "brazilian-values": "^0.13.0",
     "fastify": "^4.24.3",
+    "handlebars": "^4.7.8",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^6.9.7",
     "reflect-metadata": "^0.1.13",
     "tsyringe": "^4.8.0",
     "zod": "^3.22.2"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.4",
+    "@types/nodemailer": "^6.4.13",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "@typescript-eslint/parser": "^6.7.3",
     "@vitest/coverage-v8": "^0.34.5",

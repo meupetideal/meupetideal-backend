@@ -1,5 +1,6 @@
 import { UseCase } from '@core/application/use-case';
 import { StorageGateway } from '@core/application/gateways/storage.gateway';
+import { inject, injectable } from 'tsyringe';
 import { UsersRepository } from '../repositories/users.repository';
 import { InvalidAvatarTypeError } from './errors/invalid-avatar-type.error';
 import { InvalidAvatarSizeError } from './errors/invalid-avatar-size.error';
@@ -16,12 +17,16 @@ type Output = {
   avatarUrl: string;
 };
 
+@injectable()
 export class UpdateUserAvatarUseCase implements UseCase<Input, Output> {
   private readonly MAX_FILE_SIZE = 1 * 1024 * 1024;
 
   constructor(
+    @inject('StorageGateway')
     private storage: StorageGateway,
+    @inject('UsersService')
     private usersService: UsersService,
+    @inject('UsersRepository')
     private usersRepository: UsersRepository,
   ) {}
 

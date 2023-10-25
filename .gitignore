@@ -5,5 +5,8 @@ dist
 build
 coverage
 
+tmp/*
+!tmp/.gitkeep
+
 .env
 .env.testing
