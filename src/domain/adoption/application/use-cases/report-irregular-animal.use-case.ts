@@ -1,6 +1,7 @@
 import { UseCase } from '@core/application/use-case';
 import { Report } from '@domain/adoption/enterprise/entities/report';
 import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
+import { inject, injectable } from 'tsyringe';
 import { AnimalsService } from '../services/animals.service';
 
 type Input = {
@@ -11,8 +12,12 @@ type Input = {
 
 type Output = void;
 
+@injectable()
 export class ReportIrregularAnimalUseCase implements UseCase<Input, Output> {
-  constructor(private animalsService: AnimalsService) {}
+  constructor(
+    @inject('AnimalsService')
+    private animalsService: AnimalsService,
+  ) {}
 
   public async execute({
     reporterId,

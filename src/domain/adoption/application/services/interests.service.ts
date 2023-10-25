@@ -1,6 +1,7 @@
 import { Service } from '@core/application/service';
 import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
 import { Interest } from '@domain/adoption/enterprise/entities/interest';
+import { inject, injectable } from 'tsyringe';
 import { InterestsRepository } from '../repositories/interests.repository';
 
 interface RegisterInterestInput {
@@ -8,8 +9,12 @@ interface RegisterInterestInput {
   userId: string;
 }
 
+@injectable()
 export class InterestsService implements Service {
-  constructor(private interestsRepository: InterestsRepository) {}
+  constructor(
+    @inject('InterestsRepository')
+    private interestsRepository: InterestsRepository,
+  ) {}
 
   public async getInterest(animalId: string, userId: string) {
     const interest = await this.interestsRepository.findByAnimalIdAndUserId(

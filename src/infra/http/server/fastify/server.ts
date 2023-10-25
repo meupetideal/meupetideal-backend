@@ -17,6 +17,10 @@ import { FastifyMarkAnimalAsAdoptedController } from './controllers/fastify-mark
 import { FastifyUpdateAnimalDetailsController } from './controllers/fastify-update-animal-details.controller';
 import { FastifyFetchOwnerAnimalsController } from './controllers/fastify-fetch-owner-animals.controller';
 import { FastifyFetchAvailableAnimalsController } from './controllers/fastify-fetch-available-animals.controller';
+import { FastifyReportIrregularAnimalController } from './controllers/fastify-report-irregular-animal.controller';
+import { FastifyDemonstrateInterestInAnimalController } from './controllers/fastify-demonstrate-interest-in-animal.controller';
+import { FastifyFetchInterestsFromUserController } from './controllers/fastify-fetch-interests-from-user.controller';
+import { FastifyFetchInterestsInAnimalController } from './controllers/fastify-fetch-interests-in-animal.controller';
 
 export class FastifyServer implements AppServer {
   private _server: FastifyInstance;
@@ -99,6 +103,10 @@ export class FastifyServer implements AppServer {
       const fetchOwnerAnimals = new FastifyFetchOwnerAnimalsController();
       instance.get('/profile/animals', fetchOwnerAnimals.handle);
 
+      const fetchInterestsFromUser =
+        new FastifyFetchInterestsFromUserController();
+      instance.get('/profile/interests', fetchInterestsFromUser.handle);
+
       const registerAnimalForAdoption =
         new FastifyRegisterAnimalForAdoptionController();
       instance.post('/animals', registerAnimalForAdoption.handle);
@@ -111,6 +119,24 @@ export class FastifyServer implements AppServer {
 
       const markAnimalAsAdopted = new FastifyMarkAnimalAsAdoptedController();
       instance.patch('/animals/:animalId/adopt', markAnimalAsAdopted.handle);
+
+      const reportIrregularAnimal =
+        new FastifyReportIrregularAnimalController();
+      instance.post('/animals/:animalId/report', reportIrregularAnimal.handle);
+
+      const fetchInterestsInAnimal =
+        new FastifyFetchInterestsInAnimalController();
+      instance.get(
+        '/animals/:animalId/interests',
+        fetchInterestsInAnimal.handle,
+      );
+
+      const demonstrateInterestInAnimal =
+        new FastifyDemonstrateInterestInAnimalController();
+      instance.post(
+        '/animals/:animalId/demonstrate-interest',
+        demonstrateInterestInAnimal.handle,
+      );
 
       done();
     });

@@ -4,6 +4,7 @@ import { UsersService } from '@domain/accounts/application/services/users.servic
 import { PasswordRecoveryTokensService } from '@domain/accounts/application/services/password-recovery-tokens.service';
 import { OnUserCreated } from '@domain/emails/application/subscribers/on-user-created';
 import { AnimalsService } from '@domain/adoption/application/services/animals.service';
+import { InterestsService } from '@domain/adoption/application/services/interests.service';
 import { PrismaUsersRepository } from './database/prisma/repositories/prisma-users.repository';
 import { PrismaService } from './database/prisma/prisma.service';
 import { BcryptHasher } from './gateways/bcrypt-hasher';
@@ -13,6 +14,7 @@ import { HandlebarsMailTemplate } from './gateways/handlebars-mail-template';
 import { MailtrapMail } from './gateways/mailtrap-mail';
 import { DiskStorage } from './gateways/disk-storage';
 import { PrismaAnimalsRepository } from './database/prisma/repositories/prisma-animals.repository';
+import { PrismaInterestsRepository } from './database/prisma/repositories/prisma-interests.repository';
 
 // Repositories
 container.registerSingleton('PrismaService', PrismaService);
@@ -22,6 +24,7 @@ container.registerSingleton(
   PrismaPasswordRecoveryTokensRepository,
 );
 container.registerSingleton('AnimalsRepository', PrismaAnimalsRepository);
+container.registerSingleton('InterestsRepository', PrismaInterestsRepository);
 
 // Gateways
 container.registerSingleton('HasherGateway', BcryptHasher);
@@ -37,6 +40,7 @@ container.registerSingleton(
   PasswordRecoveryTokensService,
 );
 container.registerSingleton('AnimalsService', AnimalsService);
+container.registerSingleton('InterestsService', InterestsService);
 
 // Events
 container.registerSingleton('OnUserCreated', OnUserCreated);

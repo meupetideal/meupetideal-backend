@@ -1,5 +1,6 @@
 import { UseCase } from '@core/application/use-case';
 import { Interest } from '@domain/adoption/enterprise/entities/interest';
+import { inject, injectable } from 'tsyringe';
 import { InterestsRepository } from '../repositories/interests.repository';
 import { AnimalsService } from '../services/animals.service';
 
@@ -12,9 +13,12 @@ type Output = {
   interests: Interest[];
 };
 
+@injectable()
 export class FetchInterestsInAnimalUseCase implements UseCase<Input, Output> {
   constructor(
+    @inject('AnimalsService')
     private animalsService: AnimalsService,
+    @inject('InterestsRepository')
     private interestsRepository: InterestsRepository,
   ) {}
 
