@@ -15,6 +15,7 @@ import { MailtrapMail } from './gateways/mailtrap-mail';
 import { DiskStorage } from './gateways/disk-storage';
 import { PrismaAnimalsRepository } from './database/prisma/repositories/prisma-animals.repository';
 import { PrismaInterestsRepository } from './database/prisma/repositories/prisma-interests.repository';
+import { PrismaNotificationsRepository } from './database/prisma/repositories/prisma-notifications.repository';
 
 // Repositories
 container.registerSingleton('PrismaService', PrismaService);
@@ -25,6 +26,10 @@ container.registerSingleton(
 );
 container.registerSingleton('AnimalsRepository', PrismaAnimalsRepository);
 container.registerSingleton('InterestsRepository', PrismaInterestsRepository);
+container.registerSingleton(
+  'NotificationsRepository',
+  PrismaNotificationsRepository,
+);
 
 // Gateways
 container.registerSingleton('HasherGateway', BcryptHasher);

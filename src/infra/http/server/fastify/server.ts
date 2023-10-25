@@ -21,6 +21,7 @@ import { FastifyReportIrregularAnimalController } from './controllers/fastify-re
 import { FastifyDemonstrateInterestInAnimalController } from './controllers/fastify-demonstrate-interest-in-animal.controller';
 import { FastifyFetchInterestsFromUserController } from './controllers/fastify-fetch-interests-from-user.controller';
 import { FastifyFetchInterestsInAnimalController } from './controllers/fastify-fetch-interests-in-animal.controller';
+import { FastifyFetchNotificationsController } from './controllers/fastify-fetch-notifications.controller';
 
 export class FastifyServer implements AppServer {
   private _server: FastifyInstance;
@@ -137,6 +138,9 @@ export class FastifyServer implements AppServer {
         '/animals/:animalId/demonstrate-interest',
         demonstrateInterestInAnimal.handle,
       );
+
+      const fetchNotifications = new FastifyFetchNotificationsController();
+      instance.get('/notifications', fetchNotifications.handle);
 
       done();
     });
