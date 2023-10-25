@@ -3,6 +3,7 @@ import { Dog } from '@domain/adoption/enterprise/entities/dog';
 import { Cat } from '@domain/adoption/enterprise/entities/cat';
 import { AnimalFactory } from '@domain/adoption/enterprise/entities/factories/animal.factory';
 import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
+import { inject, injectable } from 'tsyringe';
 import { AnimalsRepository } from '../repositories/animals.repository';
 import { AnimalNotFoundError } from '../use-cases/errors/animal-not-found.error';
 import { UserNotOwnsTheAnimalError } from '../use-cases/errors/user-not-owns-the-animal.error';
@@ -24,8 +25,12 @@ interface RegisterAnimalInput {
   breed: string;
 }
 
+@injectable()
 export class AnimalsService implements Service {
-  constructor(private animalsRepository: AnimalsRepository) {}
+  constructor(
+    @inject('AnimalsRepository')
+    private animalsRepository: AnimalsRepository,
+  ) {}
 
   public async getAnimal(animalId: string): Promise<Dog | Cat> {
     const animal = await this.animalsRepository.findById(animalId);

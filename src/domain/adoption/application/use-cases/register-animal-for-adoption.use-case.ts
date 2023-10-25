@@ -1,6 +1,7 @@
 import { UseCase } from '@core/application/use-case';
 import { Cat } from '@domain/adoption/enterprise/entities/cat';
 import { Dog } from '@domain/adoption/enterprise/entities/dog';
+import { inject, injectable } from 'tsyringe';
 import { AnimalsService } from '../services/animals.service';
 
 type Input = {
@@ -24,10 +25,14 @@ type Output = {
   animal: Dog | Cat;
 };
 
+@injectable()
 export class RegisterAnimalForAdoptionUseCase
   implements UseCase<Input, Output>
 {
-  constructor(private animalsService: AnimalsService) {}
+  constructor(
+    @inject('AnimalsService')
+    private animalsService: AnimalsService,
+  ) {}
 
   public async execute({
     species,

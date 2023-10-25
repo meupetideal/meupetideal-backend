@@ -6,6 +6,7 @@ import { AnimalSize } from '@domain/adoption/enterprise/entities/value-objects/a
 import { AnimalTemperament } from '@domain/adoption/enterprise/entities/value-objects/animal-temperament.vo';
 import { AnimalCoatColor } from '@domain/adoption/enterprise/entities/value-objects/animal-coat-color.vo';
 import { AnimalFactory } from '@domain/adoption/enterprise/entities/factories/animal.factory';
+import { inject, injectable } from 'tsyringe';
 import { AnimalsRepository } from '../repositories/animals.repository';
 import { AnimalsService } from '../services/animals.service';
 
@@ -30,9 +31,12 @@ type Output = {
   animal: Dog | Cat;
 };
 
+@injectable()
 export class UpdateAnimalDetailsUseCase implements UseCase<Input, Output> {
   constructor(
+    @inject('AnimalsService')
     private animalsService: AnimalsService,
+    @inject('AnimalsRepository')
     private animalsRepository: AnimalsRepository,
   ) {}
 
