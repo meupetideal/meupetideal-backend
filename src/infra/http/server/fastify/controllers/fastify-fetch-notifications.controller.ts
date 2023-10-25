@@ -3,8 +3,9 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { FetchNotificationsUseCase } from '@domain/notifications/application/use-cases/fetch-notifications.use-case';
 import { HttpNotificationPresenter } from 'src/infra/http/presenters/http-notification.presenter';
+import { Controller } from '@core/infra/controller';
 
-export class FastifyFetchNotificationsController {
+export class FastifyFetchNotificationsController implements Controller {
   public async handle(request: FastifyRequest, reply: FastifyReply) {
     const userId = request.user.id;
     const { page, perPage } = request.query as any;

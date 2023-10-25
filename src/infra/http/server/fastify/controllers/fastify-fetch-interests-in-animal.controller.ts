@@ -3,8 +3,9 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { FetchInterestsInAnimalUseCase } from '@domain/adoption/application/use-cases/fetch-interests-in-animal.use-case';
 import { HttpInterestPresenter } from 'src/infra/http/presenters/http-interest.presenter';
+import { Controller } from '@core/infra/controller';
 
-export class FastifyFetchInterestsInAnimalController {
+export class FastifyFetchInterestsInAnimalController implements Controller {
   public async handle(request: FastifyRequest, reply: FastifyReply) {
     const userId = request.user.id;
     const { animalId } = request.params as any;

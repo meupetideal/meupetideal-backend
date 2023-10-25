@@ -1,9 +1,10 @@
+import { Controller } from '@core/infra/controller';
 import { UpdateProfileUseCase } from '@domain/accounts/application/use-cases/update-profile.use-case';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { HttpUserPresenter } from 'src/infra/http/presenters/http-user.presenter';
 import { container } from 'tsyringe';
 
-export class FastifyUpdateProfileController {
+export class FastifyUpdateProfileController implements Controller {
   public async handle(request: FastifyRequest, reply: FastifyReply) {
     const userId = request.user.id;
     const { name, cpf, email, birthday, phoneNumber } = request.body as any;

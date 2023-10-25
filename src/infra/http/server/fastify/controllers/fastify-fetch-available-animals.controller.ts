@@ -3,8 +3,9 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { FetchAvailableAnimalsUseCase } from '@domain/adoption/application/use-cases/fetch-available-animals.use-case';
 import { HttpAnimalPresenter } from 'src/infra/http/presenters/http-animal.presenter';
+import { Controller } from '@core/infra/controller';
 
-export class FastifyFetchAvailableAnimalsController {
+export class FastifyFetchAvailableAnimalsController implements Controller {
   public async handle(request: FastifyRequest, reply: FastifyReply) {
     const { page, perPage } = request.query as any;
 

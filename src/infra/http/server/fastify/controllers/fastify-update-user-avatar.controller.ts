@@ -1,8 +1,9 @@
+import { Controller } from '@core/infra/controller';
 import { UpdateUserAvatarUseCase } from '@domain/accounts/application/use-cases/update-user-avatar.use-case';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { container } from 'tsyringe';
 
-export class FastifyUpdateUserAvatarController {
+export class FastifyUpdateUserAvatarController implements Controller {
   public async handle(request: FastifyRequest, reply: FastifyReply) {
     const userId = request.user.id;
     const file = await request.file({

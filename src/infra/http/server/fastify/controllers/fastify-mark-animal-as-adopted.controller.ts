@@ -3,8 +3,9 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { MarkAnimalAsAdoptedUseCase } from '@domain/adoption/application/use-cases/mark-animal-as-adopted.use-case';
 import { HttpAnimalPresenter } from 'src/infra/http/presenters/http-animal.presenter';
+import { Controller } from '@core/infra/controller';
 
-export class FastifyMarkAnimalAsAdoptedController {
+export class FastifyMarkAnimalAsAdoptedController implements Controller {
   public async handle(request: FastifyRequest, reply: FastifyReply) {
     const ownerId = request.user.id;
     const { animalId } = request.params as any;

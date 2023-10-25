@@ -57,90 +57,119 @@ export class FastifyServer implements AppServer {
   }
 
   private async publicRoutes(): Promise<void> {
-    const registerUser = new FastifyRegisterUserController();
-    this._server.post('/accounts', registerUser.handle);
+    const controllers = [
+      {
+        controller: new FastifyRegisterUserController(),
+        method: 'post',
+        path: '/accounts',
+      },
+      {
+        controller: new FastifyAuthenticateUserController(),
+        method: 'post',
+        path: '/accounts/auth',
+      },
+      {
+        controller: new FastifyRecoverPasswordWithEmailController(),
+        method: 'post',
+        path: '/accounts/forgot-password',
+      },
+      {
+        controller: new FastifyResetPasswordWithTokenController(),
+        method: 'post',
+        path: '/accounts/reset-password',
+      },
+      {
+        controller: new FastifyFetchAvailableAnimalsController(),
+        method: 'get',
+        path: '/animals',
+      },
+    ];
 
-    const authenticateUser = new FastifyAuthenticateUserController();
-    this._server.post('/accounts/auth', authenticateUser.handle);
-
-    const recoverPasswordWithEmail =
-      new FastifyRecoverPasswordWithEmailController();
-    this._server.post(
-      '/accounts/forgot-password',
-      recoverPasswordWithEmail.handle,
-    );
-
-    const resetPasswordWithToken =
-      new FastifyResetPasswordWithTokenController();
-    this._server.post(
-      '/accounts/reset-password',
-      resetPasswordWithToken.handle,
-    );
-
-    const fetchAvailableAnimals = new FastifyFetchAvailableAnimalsController();
-    this._server.get('/animals', fetchAvailableAnimals.handle);
+    controllers.forEach(({ controller, method, path }) => {
+      this._server[method](path, controller.handle);
+    });
   }
 
   private async privateRoutes(): Promise<void> {
     this._server.register((instance, _, done) => {
       instance.addHook('preHandler', fastifyVerifyAuthorization);
 
-      const showProfile = new FastifyShowProfileController();
-      instance.get('/profile', showProfile.handle);
+      const controllers = [
+        {
+          controller: new FastifyShowProfileController(),
+          method: 'get',
+          path: '/profile',
+        },
+        {
+          controller: new FastifyUpdateProfileController(),
+          method: 'put',
+          path: '/profile',
+        },
+        {
+          controller: new FastifyUpdateUserAvatarController(),
+          method: 'patch',
+          path: '/profile/avatar',
+        },
+        {
+          controller: new FastifyResetPasswordWithCurrentPasswordController(),
+          method: 'patch',
+          path: '/profile/password',
+        },
+        {
+          controller: new FastifyFetchOwnerAnimalsController(),
+          method: 'get',
+          path: '/profile/animals',
+        },
+        {
+          controller: new FastifyFetchInterestsFromUserController(),
+          method: 'get',
+          path: '/profile/interests',
+        },
+        {
+          controller: new FastifyRegisterAnimalForAdoptionController(),
+          method: 'post',
+          path: '/animals',
+        },
+        {
+          controller: new FastifyShowAnimalDetailsController(),
+          method: 'get',
+          path: '/animals/:animalId',
+        },
+        {
+          controller: new FastifyUpdateAnimalDetailsController(),
+          method: 'put',
+          path: '/animals/:animalId',
+        },
+        {
+          controller: new FastifyMarkAnimalAsAdoptedController(),
+          method: 'patch',
+          path: '/animals/:animalId/adopt',
+        },
+        {
+          controller: new FastifyReportIrregularAnimalController(),
+          method: 'post',
+          path: '/animals/:animalId/report',
+        },
+        {
+          controller: new FastifyFetchInterestsInAnimalController(),
+          method: 'patch',
+          path: '/animals/:animalId/interests',
+        },
+        {
+          controller: new FastifyDemonstrateInterestInAnimalController(),
+          method: 'post',
+          path: '/animals/:animalId/demonstrate-interest',
+        },
+        {
+          controller: new FastifyFetchNotificationsController(),
+          method: 'get',
+          path: '/notifications',
+        },
+      ];
 
-      const updateProfile = new FastifyUpdateProfileController();
-      instance.put('/profile', updateProfile.handle);
-
-      const updateUserAvatar = new FastifyUpdateUserAvatarController();
-      instance.patch('/profile/avatar', updateUserAvatar.handle);
-
-      const resetPasswordWithCurrentPassword =
-        new FastifyResetPasswordWithCurrentPasswordController();
-      instance.patch(
-        '/profile/password',
-        resetPasswordWithCurrentPassword.handle,
-      );
-
-      const fetchOwnerAnimals = new FastifyFetchOwnerAnimalsController();
-      instance.get('/profile/animals', fetchOwnerAnimals.handle);
-
-      const fetchInterestsFromUser =
-        new FastifyFetchInterestsFromUserController();
-      instance.get('/profile/interests', fetchInterestsFromUser.handle);
-
-      const registerAnimalForAdoption =
-        new FastifyRegisterAnimalForAdoptionController();
-      instance.post('/animals', registerAnimalForAdoption.handle);
-
-      const showAnimalDetails = new FastifyShowAnimalDetailsController();
-      instance.get('/animals/:animalId', showAnimalDetails.handle);
-
-      const updateAnimalDetails = new FastifyUpdateAnimalDetailsController();
-      instance.put('/animals/:animalId', updateAnimalDetails.handle);
-
-      const markAnimalAsAdopted = new FastifyMarkAnimalAsAdoptedController();
-      instance.patch('/animals/:animalId/adopt', markAnimalAsAdopted.handle);
-
-      const reportIrregularAnimal =
-        new FastifyReportIrregularAnimalController();
-      instance.post('/animals/:animalId/report', reportIrregularAnimal.handle);
-
-      const fetchInterestsInAnimal =
-        new FastifyFetchInterestsInAnimalController();
-      instance.get(
-        '/animals/:animalId/interests',
-        fetchInterestsInAnimal.handle,
-      );
-
-      const demonstrateInterestInAnimal =
-        new FastifyDemonstrateInterestInAnimalController();
-      instance.post(
-        '/animals/:animalId/demonstrate-interest',
-        demonstrateInterestInAnimal.handle,
-      );
-
-      const fetchNotifications = new FastifyFetchNotificationsController();
-      instance.get('/notifications', fetchNotifications.handle);
+      controllers.forEach(({ controller, method, path }) => {
+        instance[method](path, controller.handle);
+      });
 
       done();
     });

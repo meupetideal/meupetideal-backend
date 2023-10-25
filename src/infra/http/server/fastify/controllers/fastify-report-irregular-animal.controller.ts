@@ -2,8 +2,9 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { container } from 'tsyringe';
 
 import { ReportIrregularAnimalUseCase } from '@domain/adoption/application/use-cases/report-irregular-animal.use-case';
+import { Controller } from '@core/infra/controller';
 
-export class FastifyReportIrregularAnimalController {
+export class FastifyReportIrregularAnimalController implements Controller {
   public async handle(request: FastifyRequest, reply: FastifyReply) {
     const userId = request.user.id;
     const { animalId } = request.params as any;

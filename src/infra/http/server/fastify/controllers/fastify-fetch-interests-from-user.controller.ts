@@ -3,8 +3,9 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { FetchInterestsFromUserUseCase } from '@domain/adoption/application/use-cases/fetch-interests-from-user.use-case';
 import { HttpInterestPresenter } from 'src/infra/http/presenters/http-interest.presenter';
+import { Controller } from '@core/infra/controller';
 
-export class FastifyFetchInterestsFromUserController {
+export class FastifyFetchInterestsFromUserController implements Controller {
   public async handle(request: FastifyRequest, reply: FastifyReply) {
     const userId = request.user.id;
 

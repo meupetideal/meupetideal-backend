@@ -1,9 +1,10 @@
+import { Controller } from '@core/infra/controller';
 import { AuthenticateUserUseCase } from '@domain/accounts/application/use-cases/authenticate-user.use-case';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { container } from 'tsyringe';
 
-export class FastifyAuthenticateUserController {
+export class FastifyAuthenticateUserController implements Controller {
   public async handle(request: FastifyRequest, reply: FastifyReply) {
     const { email, password } = request.body as any;
 
