@@ -1,5 +1,7 @@
 import fastify, { FastifyInstance } from 'fastify';
 import fastifyMultipart from '@fastify/multipart';
+import { AppError } from '@core/application/errors/app.error';
+import { EntityValidationError } from '@core/enterprise/errors/validation.error';
 import { AppServer } from '..';
 import { FastifyRegisterUserController } from './controllers/fastify-register-user.controller';
 import { FastifyAuthenticateUserController } from './controllers/fastify-authenticate-user.controller';
@@ -27,7 +29,9 @@ export class FastifyServer implements AppServer {
   private _server: FastifyInstance;
 
   private constructor() {
-    this._server = fastify();
+    this._server = fastify({
+      logger: false,
+    });
   }
 
   static create(): FastifyServer {
@@ -42,13 +46,34 @@ export class FastifyServer implements AppServer {
       await this._server.listen({ port });
       console.log(`Server running on port ${port}`);
     } catch (error) {
-      this._server.log.error(error);
       process.exit(1);
     }
   }
 
   private async registerHandlers(): Promise<void> {
     this._server.register(fastifyMultipart);
+
+    this._server.setErrorHandler((error, _, reply) => {
+      if (error instanceof AppError) {
+        const validationErrors =
+          error instanceof EntityValidationError ? error.error : null;
+
+        return reply.status(error.statusCode).send({
+          ...error.format(),
+          validationErrors,
+        });
+      }
+
+      if (process.env.NODE_ENV === 'development') {
+        console.log(error);
+      }
+
+      return reply.status(500).send({
+        type: 'InternalServerError',
+        message: 'Internal Server Error',
+        sentryErrorId: null,
+      });
+    });
   }
 
   private async registerRoutes(): Promise<void> {

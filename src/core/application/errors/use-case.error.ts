@@ -1,3 +1,3 @@
-export interface UseCaseError {
-  message: string;
-}
+import { AppError } from './app.error';
+
+export abstract class UseCaseError extends AppError {}

@@ -1,5 +1,6 @@
 import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from 'fastify';
 import { verify } from 'jsonwebtoken';
+import { AuthenticationTokenExpiredError } from 'src/infra/http/errors/authentication-token-expired.error';
 
 export const fastifyVerifyAuthorization = (
   request: FastifyRequest,
@@ -9,13 +10,13 @@ export const fastifyVerifyAuthorization = (
   const { authorization } = request.headers;
 
   if (!authorization) {
-    return reply.status(401).send({ error: 'token-invalid' });
+    throw new AuthenticationTokenExpiredError();
   }
 
   const [, token] = authorization.split(' ');
 
   if (!token) {
-    return reply.status(401).send({ error: 'token-invalid' });
+    throw new AuthenticationTokenExpiredError();
   }
 
   try {
@@ -29,6 +30,6 @@ export const fastifyVerifyAuthorization = (
 
     return done();
   } catch {
-    return reply.status(401).send({ error: 'token-expired' });
+    throw new AuthenticationTokenExpiredError();
   }
 };
