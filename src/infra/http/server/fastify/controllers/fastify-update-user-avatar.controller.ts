@@ -1,3 +1,4 @@
+import { ValidationError } from '@core/enterprise/errors/validation.error';
 import { Controller } from '@core/infra/controller';
 import { UpdateUserAvatarUseCase } from '@domain/accounts/application/use-cases/update-user-avatar.use-case';
 import { FastifyReply, FastifyRequest } from 'fastify';
@@ -14,9 +15,7 @@ export class FastifyUpdateUserAvatarController implements Controller {
     });
 
     if (!file) {
-      return reply.status(400).send({
-        message: 'File not found',
-      });
+      throw new ValidationError('File not found');
     }
 
     const useCase = container.resolve(UpdateUserAvatarUseCase);

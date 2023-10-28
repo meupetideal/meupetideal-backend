@@ -1,13 +1,29 @@
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { container } from 'tsyringe';
+import { z } from 'zod';
+
 import { Controller } from '@core/infra/controller';
 import { UpdateProfileUseCase } from '@domain/accounts/application/use-cases/update-profile.use-case';
-import { FastifyReply, FastifyRequest } from 'fastify';
 import { HttpUserPresenter } from 'src/infra/http/presenters/http-user.presenter';
-import { container } from 'tsyringe';
+import { ZodValidationPipe } from 'src/infra/http/pipes/zod-validation.pipe';
+
+const bodySchema = z.object({
+  name: z.string(),
+  cpf: z.string(),
+  email: z.string(),
+  birthday: z.coerce.date(),
+  phoneNumber: z.string(),
+});
+
+type BodySchema = z.infer<typeof bodySchema>;
 
 export class FastifyUpdateProfileController implements Controller {
   public async handle(request: FastifyRequest, reply: FastifyReply) {
     const userId = request.user.id;
-    const { name, cpf, email, birthday, phoneNumber } = request.body as any;
+
+    const validationPipe = new ZodValidationPipe<BodySchema>(bodySchema);
+    const { name, cpf, email, birthday, phoneNumber } =
+      validationPipe.transform(request.body);
 
     const useCase = container.resolve(UpdateProfileUseCase);
 
@@ -16,7 +32,7 @@ export class FastifyUpdateProfileController implements Controller {
       name,
       cpf,
       email,
-      birthday: new Date(birthday),
+      birthday,
       phoneNumber,
     });
 
