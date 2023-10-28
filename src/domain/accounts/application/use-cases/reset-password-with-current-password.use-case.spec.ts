@@ -52,7 +52,25 @@ describe('#UC05 ResetPasswordWithCurrentPasswordUseCase', () => {
     expect(usersRepository.items[0].hashedPassword).toBe('new-password-hashed');
   });
 
-  it('should throw an error if the passwords do not match', async () => {
+  it('should throw an error if the old password do not match with the registered password', async () => {
+    const user = UserBuilder.create()
+      .withHashedPassword('old-password-hashed')
+      .build();
+    await usersRepository.insert(user);
+
+    const input = {
+      userId: user.id.value,
+      oldPassword: 'different-old-password',
+      password: 'new-password',
+      passwordConfirmation: 'new-password',
+    };
+
+    await expect(() =>
+      resetPasswordWithCurrentPasswordUseCase.execute(input),
+    ).rejects.toThrow(UnmatchedPasswordsError);
+  });
+
+  it('should throw an error if the new passwords do not match', async () => {
     const user = UserBuilder.create()
       .withHashedPassword('old-password-hashed')
       .build();
@@ -65,9 +83,9 @@ describe('#UC05 ResetPasswordWithCurrentPasswordUseCase', () => {
       passwordConfirmation: 'another-new-password',
     };
 
-    await expect(
+    await expect(() =>
       resetPasswordWithCurrentPasswordUseCase.execute(input),
-    ).rejects.toThrowError(UnmatchedPasswordsError);
+    ).rejects.toThrow(UnmatchedPasswordsError);
   });
 
   it('should throw an error if the user is not found', async () => {
