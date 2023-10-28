@@ -39,7 +39,7 @@ describe('#UC06 UpdateProfileUseCase', () => {
       email: 'new.name@example.com',
       cpf: '27432647488',
       birthday: new Date(1984, 8, 3),
-      phoneNumber: '+556836748707',
+      phoneNumber: '6836748707',
     };
 
     const output = await updateProfileUseCase.execute(input);
@@ -63,7 +63,7 @@ describe('#UC06 UpdateProfileUseCase', () => {
       email: 'new.name@example.com',
       cpf: '27432647488',
       birthday: new Date(1984, 8, 3),
-      phoneNumber: '+556836748707',
+      phoneNumber: '6836748707',
     };
 
     await expect(updateProfileUseCase.execute(input)).rejects.toThrowError(
@@ -86,7 +86,7 @@ describe('#UC06 UpdateProfileUseCase', () => {
       email: 'new.name@example.com',
       cpf: '27432647488',
       birthday: new Date(1984, 8, 3),
-      phoneNumber: '+556836748707',
+      phoneNumber: '6836748707',
     };
 
     await expect(updateProfileUseCase.execute(input)).rejects.toThrowError(
@@ -113,7 +113,7 @@ describe('#UC06 UpdateProfileUseCase', () => {
       email: 'new.name@example.com',
       cpf: '27432647488',
       birthday: new Date(1984, 8, 3),
-      phoneNumber: '+556836748707',
+      phoneNumber: '6836748707',
     };
 
     await expect(updateProfileUseCase.execute(input)).rejects.toThrowError(

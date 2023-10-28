@@ -36,7 +36,7 @@ describe('#UC01 RegisterUserUseCase', () => {
       email: 'john.doe@example.com',
       password: 'password',
       birthday: new Date(1960, 7, 26),
-      phoneNumber: '+5561928473441',
+      phoneNumber: '61928473441',
     };
 
     const output = await registerUserUseCase.execute(input);
@@ -47,11 +47,11 @@ describe('#UC01 RegisterUserUseCase', () => {
     expect(output.user).toBeInstanceOf(User);
 
     expect(output.user.name).toBe(input.name);
-    expect(output.user.cpf).toBe(input.cpf);
-    expect(output.user.email).toBe(input.email);
+    expect(output.user.cpf.value).toBe(input.cpf);
+    expect(output.user.email.value).toBe(input.email);
     expect(output.user.hashedPassword).not.toBe(input.password);
-    expect(output.user.birthday).toBe(input.birthday);
-    expect(output.user.phoneNumber).toBe(input.phoneNumber);
+    expect(output.user.birthday.value).toBe(input.birthday);
+    expect(output.user.phoneNumber.value).toBe(input.phoneNumber);
   });
 
   it('should hash the password before inserting the user into the repository', async () => {
@@ -63,7 +63,7 @@ describe('#UC01 RegisterUserUseCase', () => {
       email: 'john.doe@example.com',
       password: 'password',
       birthday: new Date(1960, 7, 26),
-      phoneNumber: '+5561928473441',
+      phoneNumber: '61928473441',
     };
 
     const output = await registerUserUseCase.execute(input);
@@ -87,7 +87,7 @@ describe('#UC01 RegisterUserUseCase', () => {
       email: 'existing.user@example.com',
       password: 'password',
       birthday: new Date(1960, 7, 26),
-      phoneNumber: '+5561928473441',
+      phoneNumber: '61928473441',
     };
 
     await expect(registerUserUseCase.execute(input)).rejects.toThrow(
@@ -106,7 +106,7 @@ describe('#UC01 RegisterUserUseCase', () => {
       email: 'johndoe@example.com',
       password: 'password',
       birthday: new Date(1990, 7, 26),
-      phoneNumber: '+5561928473441',
+      phoneNumber: '61928473441',
     };
 
     await expect(registerUserUseCase.execute(input)).rejects.toThrow(

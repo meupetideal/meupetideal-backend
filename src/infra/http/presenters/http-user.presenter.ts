@@ -5,10 +5,10 @@ export class HttpUserPresenter {
     return {
       id: user.id.value,
       name: user.name,
-      cpf: user.cpf,
-      email: user.email,
-      birthday: user.birthday,
-      phoneNumber: user.phoneNumber,
+      cpf: user.cpf.format(),
+      email: user.email.value,
+      birthday: user.birthday.value,
+      phoneNumber: user.phoneNumber.format(),
       avatarUrl: user.avatarUrl ?? null,
     };
   }

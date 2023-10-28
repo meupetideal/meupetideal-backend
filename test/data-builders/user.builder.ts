@@ -1,5 +1,9 @@
 import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
 import { User } from '@domain/accounts/enterprise/entities/user';
+import { Birthday } from '@domain/accounts/enterprise/entities/value-objects/birthday.vo';
+import { CPF } from '@domain/accounts/enterprise/entities/value-objects/cpf.vo';
+import { Email } from '@domain/accounts/enterprise/entities/value-objects/email.vo';
+import { PhoneNumber } from '@domain/accounts/enterprise/entities/value-objects/phone-number.vo';
 
 export class UserBuilder {
   private id: string | undefined;
@@ -14,7 +18,7 @@ export class UserBuilder {
 
   private birthday: Date = new Date('1990-08-23');
 
-  private phoneNumber: string = '+5595998615483';
+  private phoneNumber: string = '95998615483';
 
   private avatarUrl: string | undefined;
 
@@ -68,11 +72,11 @@ export class UserBuilder {
     return User.create(
       {
         name: this.name,
-        cpf: this.cpf,
-        email: this.email,
+        cpf: CPF.create(this.cpf),
+        email: Email.create(this.email),
         hashedPassword: this.hashedPassword,
-        birthday: this.birthday,
-        phoneNumber: this.phoneNumber,
+        birthday: Birthday.create(this.birthday),
+        phoneNumber: PhoneNumber.create(this.phoneNumber),
         avatarUrl: this.avatarUrl,
       },
       this.id ? UniqueEntityId.create(this.id) : undefined,

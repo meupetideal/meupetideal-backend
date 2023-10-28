@@ -3,14 +3,18 @@ import { EntityValidationError } from '@core/enterprise/errors/validation.error'
 import { AggregateRoot } from '@core/enterprise/aggregate-root';
 import { UserValidatorFactory } from '../validators/user.validator';
 import { UserCreatedEvent } from '../events/user-created.event';
+import { CPF } from './value-objects/cpf.vo';
+import { Email } from './value-objects/email.vo';
+import { Birthday } from './value-objects/birthday.vo';
+import { PhoneNumber } from './value-objects/phone-number.vo';
 
 export interface UserProps {
   name: string;
-  cpf: string;
-  email: string;
+  cpf: CPF;
+  email: Email;
   hashedPassword: string;
-  birthday: Date;
-  phoneNumber: string;
+  birthday: Birthday;
+  phoneNumber: PhoneNumber;
   avatarUrl?: string;
 }
 
@@ -35,19 +39,19 @@ export class User extends AggregateRoot<UserProps> {
     this.props.name = name;
   }
 
-  get cpf(): string {
+  get cpf(): CPF {
     return this.props.cpf;
   }
 
-  set cpf(cpf: string) {
+  set cpf(cpf: CPF) {
     this.props.cpf = cpf;
   }
 
-  get email(): string {
+  get email(): Email {
     return this.props.email;
   }
 
-  set email(email: string) {
+  set email(email: Email) {
     this.props.email = email;
   }
 
@@ -59,19 +63,19 @@ export class User extends AggregateRoot<UserProps> {
     this.props.hashedPassword = hashedPassword;
   }
 
-  get birthday(): Date {
+  get birthday(): Birthday {
     return this.props.birthday;
   }
 
-  set birthday(birthday: Date) {
+  set birthday(birthday: Birthday) {
     this.props.birthday = birthday;
   }
 
-  get phoneNumber(): string {
+  get phoneNumber(): PhoneNumber {
     return this.props.phoneNumber;
   }
 
-  set phoneNumber(phoneNumber: string) {
+  set phoneNumber(phoneNumber: PhoneNumber) {
     this.props.phoneNumber = phoneNumber;
   }
 

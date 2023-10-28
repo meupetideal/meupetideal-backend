@@ -1,6 +1,10 @@
 import { Service } from '@core/application/service';
 import { User } from '@domain/accounts/enterprise/entities/user';
 import { inject, injectable } from 'tsyringe';
+import { CPF } from '@domain/accounts/enterprise/entities/value-objects/cpf.vo';
+import { Email } from '@domain/accounts/enterprise/entities/value-objects/email.vo';
+import { Birthday } from '@domain/accounts/enterprise/entities/value-objects/birthday.vo';
+import { PhoneNumber } from '@domain/accounts/enterprise/entities/value-objects/phone-number.vo';
 import { UnmatchedPasswordsError } from '../use-cases/errors/unmatched-passwords.error';
 import { UserNotFoundError } from '../use-cases/errors/user-not-found.error';
 import { HasherGateway } from '../gateways/hasher';
@@ -65,11 +69,11 @@ export class UsersService implements Service {
 
     const user = User.create({
       name,
-      cpf,
-      email,
+      cpf: CPF.create(cpf),
+      email: Email.create(email),
       hashedPassword,
-      birthday,
-      phoneNumber,
+      birthday: Birthday.create(birthday),
+      phoneNumber: PhoneNumber.create(phoneNumber),
     });
 
     await this.usersRepository.insert(user);
