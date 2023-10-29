@@ -6,6 +6,11 @@ export enum AnimalGenderEnum {
   FEMALE = 'female',
 }
 
+export const animalGenderTranslations: Record<AnimalGenderEnum, string> = {
+  male: 'Macho',
+  female: 'Fêmea',
+};
+
 export class AnimalGender extends ValueObject<AnimalGenderEnum> {
   public static create(value: string | AnimalGenderEnum): AnimalGender {
     const animalGender = AnimalGender.fromString(value);

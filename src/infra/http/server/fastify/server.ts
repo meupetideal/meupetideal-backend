@@ -24,6 +24,7 @@ import { FastifyDemonstrateInterestInAnimalController } from './controllers/fast
 import { FastifyFetchInterestsFromUserController } from './controllers/fastify-fetch-interests-from-user.controller';
 import { FastifyFetchInterestsInAnimalController } from './controllers/fastify-fetch-interests-in-animal.controller';
 import { FastifyFetchNotificationsController } from './controllers/fastify-fetch-notifications.controller';
+import { FastifyOptionsListController } from './controllers/fastify-options-list.controller';
 
 export class FastifyServer implements AppServer {
   private _server: FastifyInstance;
@@ -107,6 +108,11 @@ export class FastifyServer implements AppServer {
         controller: new FastifyFetchAvailableAnimalsController(),
         method: 'get',
         path: '/animals',
+      },
+      {
+        controller: new FastifyOptionsListController(),
+        method: 'get',
+        path: '/options',
       },
     ];
 

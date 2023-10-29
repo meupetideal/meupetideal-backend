@@ -6,6 +6,11 @@ export enum AnimalStatusEnum {
   AVAILABLE = 'available',
 }
 
+export const animalStatusTranslations: Record<AnimalStatusEnum, string> = {
+  adopted: 'Adotado',
+  available: 'Disponível',
+};
+
 export class AnimalStatus extends ValueObject<AnimalStatusEnum> {
   public static create(
     value: string | AnimalStatusEnum | undefined,

@@ -6,6 +6,11 @@ export enum AnimalCatBreedEnum {
   PERSA = 'persa',
 }
 
+export const animalCatBreedTranslations: Record<AnimalCatBreedEnum, string> = {
+  srd: 'SRD',
+  persa: 'Persa',
+};
+
 export class AnimalCatBreed extends ValueObject<AnimalCatBreedEnum> {
   public static create(value: string | AnimalCatBreedEnum): AnimalCatBreed {
     const animalCatBreed = AnimalCatBreed.fromString(value);

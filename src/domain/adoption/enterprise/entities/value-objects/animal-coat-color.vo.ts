@@ -14,6 +14,20 @@ export enum AnimalCoatColorEnum {
   CHOCOLATE = 'chocolate',
 }
 
+export const animalCoatColorTranslations: Record<AnimalCoatColorEnum, string> =
+  {
+    white: 'Branco',
+    black: 'Preto',
+    brown: 'Marrom',
+    gray: 'Cinza',
+    caramel: 'Caramelo',
+    cream: 'Creme',
+    orange: 'Laranja',
+    fawn: 'Fulvo',
+    brindle: 'Tigrado',
+    chocolate: 'Chocolate',
+  };
+
 export class AnimalCoatColor extends ValueObject<AnimalCoatColorEnum> {
   public static create(value: string | AnimalCoatColorEnum): AnimalCoatColor {
     const animalCoatColor = AnimalCoatColor.fromString(value);
@@ -34,5 +48,9 @@ export class AnimalCoatColor extends ValueObject<AnimalCoatColorEnum> {
     }
 
     return AnimalCoatColorEnum[key];
+  }
+
+  public format(): string {
+    return animalCoatColorTranslations[this.value];
   }
 }

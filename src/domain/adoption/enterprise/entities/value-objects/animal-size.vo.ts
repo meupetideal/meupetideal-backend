@@ -9,6 +9,14 @@ export enum AnimalSizeEnum {
   EXTRA_LARGE = 'extra-large',
 }
 
+export const animalSizeTranslations: Record<AnimalSizeEnum, string> = {
+  'extra-small': 'Mini',
+  small: 'Pequeno',
+  medium: 'Médio',
+  large: 'Grande',
+  'extra-large': 'Gigante',
+};
+
 export class AnimalSize extends ValueObject<AnimalSizeEnum> {
   public static create(value: string | AnimalSizeEnum): AnimalSize {
     const animalSize = AnimalSize.fromString(value);

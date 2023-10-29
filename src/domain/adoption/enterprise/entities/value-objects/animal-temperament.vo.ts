@@ -17,6 +17,25 @@ export enum AnimalTemperamentEnum {
   ADVENTUROUS = 'adventurous',
 }
 
+export const animalTemperamentTranslations: Record<
+  AnimalTemperamentEnum,
+  string
+> = {
+  playful: 'Brincalhão',
+  aggressive: 'Agressivo',
+  shy: 'Tímido',
+  energetic: 'Energético',
+  independent: 'Independente',
+  calm: 'Calmo',
+  'child-friendly': 'Amigável com crianças',
+  'animal-friendly': 'Amigável com animais',
+  intelligent: 'Inteligente',
+  sociable: 'Sociável',
+  confident: 'Confiante',
+  affectionate: 'Afetuoso',
+  adventurous: 'Aventureiro',
+};
+
 export class AnimalTemperament extends ValueObject<AnimalTemperamentEnum> {
   public static create(
     value: string | AnimalTemperamentEnum,
