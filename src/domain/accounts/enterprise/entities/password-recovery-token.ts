@@ -1,7 +1,7 @@
 import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
 import { EntityValidationError } from '@core/enterprise/errors/validation.error';
 import { PickOut } from '@core/enterprise/logic/pick-out';
-import { AggregateRoot } from '@core/enterprise/aggregate-root';
+import { Entity } from '@core/enterprise/entity';
 import { PasswordRecoveryTokenValidatorFactory } from '../validators/password-recovery-token.validator';
 import { PasswordRecoveryTokenCreatedEvent } from '../events/password-recovery-token-created.event';
 
@@ -11,7 +11,7 @@ export interface PasswordRecoveryTokenProps {
   expiresAt: Date;
 }
 
-export class PasswordRecoveryToken extends AggregateRoot<PasswordRecoveryTokenProps> {
+export class PasswordRecoveryToken extends Entity<PasswordRecoveryTokenProps> {
   public static create(
     props: PickOut<PasswordRecoveryTokenProps, 'expiresAt'>,
     id?: UniqueEntityId,

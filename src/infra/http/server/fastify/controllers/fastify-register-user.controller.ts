@@ -14,6 +14,10 @@ const bodySchema = z.object({
   password: z.string(),
   birthday: z.coerce.date(),
   phoneNumber: z.string(),
+  neighborhood: z.string(),
+  city: z.string(),
+  state: z.string(),
+  country: z.string(),
 });
 
 type BodySchema = z.infer<typeof bodySchema>;
@@ -21,8 +25,18 @@ type BodySchema = z.infer<typeof bodySchema>;
 export class FastifyRegisterUserController implements Controller {
   public async handle(request: FastifyRequest, reply: FastifyReply) {
     const validationPipe = new ZodValidationPipe<BodySchema>(bodySchema);
-    const { name, cpf, email, password, birthday, phoneNumber } =
-      validationPipe.transform(request.body);
+    const {
+      name,
+      cpf,
+      email,
+      password,
+      birthday,
+      phoneNumber,
+      neighborhood,
+      city,
+      state,
+      country,
+    } = validationPipe.transform(request.body);
 
     const useCase = container.resolve(RegisterUserUseCase);
 
@@ -33,6 +47,10 @@ export class FastifyRegisterUserController implements Controller {
       password,
       birthday,
       phoneNumber,
+      neighborhood,
+      city,
+      state,
+      country,
     });
 
     return reply.send({

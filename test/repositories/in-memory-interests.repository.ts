@@ -32,6 +32,6 @@ export class InMemoryInterestsRepository implements InterestsRepository {
   public async insert(entity: Interest): Promise<void> {
     this.items.push(entity);
 
-    DomainEvents.dispatchEventsForAggregate(entity.id);
+    DomainEvents.dispatchEventsForEntity(entity.id);
   }
 }

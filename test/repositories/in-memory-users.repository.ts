@@ -24,7 +24,7 @@ export class InMemoryUsersRepository implements UsersRepository {
   public async insert(entity: User): Promise<void> {
     this.items.push(entity);
 
-    DomainEvents.dispatchEventsForAggregate(entity.id);
+    DomainEvents.dispatchEventsForEntity(entity.id);
   }
 
   public async save(entity: User): Promise<void> {

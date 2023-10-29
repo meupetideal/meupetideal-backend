@@ -11,11 +11,11 @@ describe('UserCreatedEvent', () => {
     expect(event.ocurredAt).toBeInstanceOf(Date);
   });
 
-  test('getAggregateId', () => {
+  test('getEntityId', () => {
     const user = UserBuilder.create().build();
 
     const event = new UserCreatedEvent(user);
 
-    expect(event.getAggregateId()).toEqual(user.id);
+    expect(event.getEntityId()).toEqual(user.id);
   });
 });

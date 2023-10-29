@@ -5,6 +5,8 @@ import { CPF } from '@domain/accounts/enterprise/entities/value-objects/cpf.vo';
 import { Email } from '@domain/accounts/enterprise/entities/value-objects/email.vo';
 import { Birthday } from '@domain/accounts/enterprise/entities/value-objects/birthday.vo';
 import { PhoneNumber } from '@domain/accounts/enterprise/entities/value-objects/phone-number.vo';
+import { Address } from '@domain/accounts/enterprise/entities/value-objects/address.vo';
+import { Country } from '@domain/accounts/enterprise/entities/value-objects/country.vo';
 import { UnmatchedPasswordsError } from '../use-cases/errors/unmatched-passwords.error';
 import { UserNotFoundError } from '../use-cases/errors/user-not-found.error';
 import { HasherGateway } from '../gateways/hasher';
@@ -18,6 +20,10 @@ type RegisterUserInput = {
   password: string;
   birthday: Date;
   phoneNumber: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+  country: string;
 };
 
 type ResetPasswordInput = {
@@ -52,6 +58,10 @@ export class UsersService implements Service {
     password,
     birthday,
     phoneNumber,
+    neighborhood,
+    city,
+    state,
+    country,
   }: RegisterUserInput): Promise<User> {
     let userAlreadyExists = await this.usersRepository.findByEmail(email);
 
@@ -67,6 +77,13 @@ export class UsersService implements Service {
 
     const hashedPassword = await this.hasher.hash(password);
 
+    const address = Address.create({
+      neighborhood,
+      city,
+      state,
+      country: Country.create(country),
+    });
+
     const user = User.create({
       name,
       cpf: CPF.create(cpf),
@@ -74,6 +91,7 @@ export class UsersService implements Service {
       hashedPassword,
       birthday: Birthday.create(birthday),
       phoneNumber: PhoneNumber.create(phoneNumber),
+      address,
     });
 
     await this.usersRepository.insert(user);

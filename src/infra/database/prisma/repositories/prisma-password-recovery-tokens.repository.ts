@@ -32,7 +32,7 @@ export class PrismaPasswordRecoveryTokensRepository
       data: PrismaPasswordRecoveryTokenMapper.toPrisma(entity),
     });
 
-    DomainEvents.dispatchEventsForAggregate(entity.id);
+    DomainEvents.dispatchEventsForEntity(entity.id);
   }
 
   public async delete(entity: PasswordRecoveryToken): Promise<void> {

@@ -10,6 +10,10 @@ type Input = {
   password: string;
   birthday: Date;
   phoneNumber: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+  country: string;
 };
 
 type Output = {
@@ -27,6 +31,10 @@ export class RegisterUserUseCase implements UseCase<Input, Output> {
     password,
     birthday,
     phoneNumber,
+    neighborhood,
+    city,
+    state,
+    country,
   }: Input): Promise<Output> {
     const user = await this.usersService.register({
       name,
@@ -35,6 +43,10 @@ export class RegisterUserUseCase implements UseCase<Input, Output> {
       password,
       birthday,
       phoneNumber,
+      neighborhood,
+      city,
+      state,
+      country,
     });
 
     return { user };

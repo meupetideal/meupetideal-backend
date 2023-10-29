@@ -1,7 +1,7 @@
 import { EntityValidationError } from '@core/enterprise/errors/validation.error';
 import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
 import { PickOut } from '@core/enterprise/logic/pick-out';
-import { AggregateRoot } from '@core/enterprise/aggregate-root';
+import { Entity } from '@core/enterprise/Entity';
 import { InterestValidatorFactory } from '../validators/interest.validator';
 import { InterestDemonstratedEvent } from '../events/interest-demonstrated.event';
 
@@ -11,7 +11,7 @@ interface InterestProps {
   expressedAt: Date;
 }
 
-export class Interest extends AggregateRoot<InterestProps> {
+export class Interest extends Entity<InterestProps> {
   static create(
     props: PickOut<InterestProps, 'expressedAt'>,
     id?: UniqueEntityId,

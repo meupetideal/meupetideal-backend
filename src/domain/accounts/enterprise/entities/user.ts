@@ -7,6 +7,7 @@ import { CPF } from './value-objects/cpf.vo';
 import { Email } from './value-objects/email.vo';
 import { Birthday } from './value-objects/birthday.vo';
 import { PhoneNumber } from './value-objects/phone-number.vo';
+import { Address } from './value-objects/address.vo';
 
 export interface UserProps {
   name: string;
@@ -16,6 +17,7 @@ export interface UserProps {
   birthday: Birthday;
   phoneNumber: PhoneNumber;
   avatarUrl?: string;
+  address: Address;
 }
 
 export class User extends AggregateRoot<UserProps> {
@@ -85,6 +87,14 @@ export class User extends AggregateRoot<UserProps> {
 
   set avatarUrl(avatarUrl: string | undefined) {
     this.props.avatarUrl = avatarUrl;
+  }
+
+  get address(): Address {
+    return this.props.address;
+  }
+
+  set address(address: Address) {
+    this.props.address = address;
   }
 
   static validate(data: UserProps): void {

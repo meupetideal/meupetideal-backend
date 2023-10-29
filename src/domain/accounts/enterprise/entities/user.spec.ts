@@ -6,10 +6,19 @@ import { CPF } from './value-objects/cpf.vo';
 import { Email } from './value-objects/email.vo';
 import { Birthday } from './value-objects/birthday.vo';
 import { PhoneNumber } from './value-objects/phone-number.vo';
+import { Address } from './value-objects/address.vo';
+import { Country } from './value-objects/country.vo';
 
 describe('User Unit Tests', () => {
   test('constructor', () => {
     const spyValidate = vi.spyOn(User, 'validate');
+
+    const address = Address.create({
+      neighborhood: 'Jardim Paulista',
+      city: 'São Paulo',
+      state: 'São Paulo',
+      country: Country.create('br'),
+    });
 
     const user = User.create({
       name: 'John Doe',
@@ -19,6 +28,7 @@ describe('User Unit Tests', () => {
       hashedPassword:
         '$2a$08$ekAjnR5DXK.tHjvgtkZpk.ZaPtRQK6VwnjL.Y3YQWtvKHxbhY6UaW',
       phoneNumber: PhoneNumber.create('94997793802'),
+      address,
     });
 
     expect(user).toBeDefined();

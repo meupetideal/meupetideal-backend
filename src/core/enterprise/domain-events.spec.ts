@@ -1,30 +1,30 @@
-import { AggregateRoot } from './aggregate-root';
+import { Entity } from './entity';
 import { DomainEvent } from './domain-event';
 import { DomainEvents } from './domain-events';
 import { UniqueEntityId } from './unique-entity-id.vo';
 
-class CustomAggregateCreated implements DomainEvent {
+class CustomEntityCreated implements DomainEvent {
   public ocurredAt: Date;
 
-  private aggregate: CustomAggregate;
+  private entity: CustomEntity;
 
-  constructor(aggregate: CustomAggregate) {
-    this.aggregate = aggregate;
+  constructor(entity: CustomEntity) {
+    this.entity = entity;
     this.ocurredAt = new Date();
   }
 
-  public getAggregateId(): UniqueEntityId {
-    return this.aggregate.id;
+  public getEntityId(): UniqueEntityId {
+    return this.entity.id;
   }
 }
 
-class CustomAggregate extends AggregateRoot<null> {
+class CustomEntity extends Entity<null> {
   static create() {
-    const aggregate = new CustomAggregate(null);
+    const entity = new CustomEntity(null);
 
-    aggregate.addDomainEvent(new CustomAggregateCreated(aggregate));
+    entity.addDomainEvent(new CustomEntityCreated(entity));
 
-    return aggregate;
+    return entity;
   }
 }
 
@@ -32,70 +32,70 @@ describe('domain events', () => {
   it('should be able to dispatch and listen to events', async () => {
     const callbackSpy = vi.fn();
 
-    DomainEvents.register(callbackSpy, CustomAggregateCreated.name);
+    DomainEvents.register(callbackSpy, CustomEntityCreated.name);
 
-    const aggregate = CustomAggregate.create();
+    const entity = CustomEntity.create();
 
-    expect(aggregate.domainEvents).toHaveLength(1);
+    expect(entity.domainEvents).toHaveLength(1);
 
-    DomainEvents.dispatchEventsForAggregate(aggregate.id);
+    DomainEvents.dispatchEventsForEntity(entity.id);
 
     expect(callbackSpy).toHaveBeenCalled();
 
-    expect(aggregate.domainEvents).toHaveLength(0);
+    expect(entity.domainEvents).toHaveLength(0);
   });
 
   test('clearHandlers', () => {
     const callbackSpy = vi.fn();
 
-    DomainEvents.register(callbackSpy, CustomAggregateCreated.name);
+    DomainEvents.register(callbackSpy, CustomEntityCreated.name);
 
     DomainEvents.clearHandlers();
 
-    const aggregate = CustomAggregate.create();
+    const entity = CustomEntity.create();
 
-    expect(aggregate.domainEvents).toHaveLength(1);
+    expect(entity.domainEvents).toHaveLength(1);
 
-    DomainEvents.dispatchEventsForAggregate(aggregate.id);
+    DomainEvents.dispatchEventsForEntity(entity.id);
 
     expect(callbackSpy).not.toHaveBeenCalled();
 
-    expect(aggregate.domainEvents).toHaveLength(0);
+    expect(entity.domainEvents).toHaveLength(0);
   });
 
-  test('clearMarkedAggregates', () => {
+  test('clearMarkedEntitys', () => {
     const callbackSpy = vi.fn();
 
-    DomainEvents.register(callbackSpy, CustomAggregateCreated.name);
+    DomainEvents.register(callbackSpy, CustomEntityCreated.name);
 
-    const aggregate = CustomAggregate.create();
+    const entity = CustomEntity.create();
 
-    expect(aggregate.domainEvents).toHaveLength(1);
+    expect(entity.domainEvents).toHaveLength(1);
 
-    DomainEvents.clearMarkedAggregates();
+    DomainEvents.clearMarkedEntities();
 
-    DomainEvents.dispatchEventsForAggregate(aggregate.id);
+    DomainEvents.dispatchEventsForEntity(entity.id);
 
     expect(callbackSpy).not.toHaveBeenCalled();
 
-    expect(aggregate.domainEvents).toHaveLength(1);
+    expect(entity.domainEvents).toHaveLength(1);
   });
 
   test('shouldRun', () => {
     const callbackSpy = vi.fn();
 
-    DomainEvents.register(callbackSpy, CustomAggregateCreated.name);
+    DomainEvents.register(callbackSpy, CustomEntityCreated.name);
 
-    const aggregate = CustomAggregate.create();
+    const entity = CustomEntity.create();
 
-    expect(aggregate.domainEvents).toHaveLength(1);
+    expect(entity.domainEvents).toHaveLength(1);
 
     DomainEvents.shouldRun = false;
 
-    DomainEvents.dispatchEventsForAggregate(aggregate.id);
+    DomainEvents.dispatchEventsForEntity(entity.id);
 
     expect(callbackSpy).not.toHaveBeenCalled();
 
-    expect(aggregate.domainEvents).toHaveLength(0);
+    expect(entity.domainEvents).toHaveLength(0);
   });
 });

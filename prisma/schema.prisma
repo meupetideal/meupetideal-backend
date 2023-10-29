@@ -22,6 +22,7 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  address Address?
   animals Animal[]
   interests Interest[]
   passwordRecoveryTokens PasswordRecoveryToken[]
@@ -30,6 +31,18 @@ model User {
   accusedOwnerReports Report[]  @relation("accusedOwner")
 
   @@map("users")
+}
+
+model Address {
+  userId String @id @map("user_id")
+  neighborhood String
+  city String
+  state String
+  country String
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("addresses")
 }
 
 model PasswordRecoveryToken {

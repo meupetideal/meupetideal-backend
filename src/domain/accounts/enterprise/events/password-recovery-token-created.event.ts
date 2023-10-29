@@ -12,7 +12,7 @@ export class PasswordRecoveryTokenCreatedEvent implements DomainEvent {
     this.ocurredAt = new Date();
   }
 
-  getAggregateId(): UniqueEntityId {
+  getEntityId(): UniqueEntityId {
     return this.passwordRecoveryToken.id;
   }
 }

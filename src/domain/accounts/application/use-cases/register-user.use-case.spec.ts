@@ -37,6 +37,10 @@ describe('#UC01 RegisterUserUseCase', () => {
       password: 'password',
       birthday: new Date(1960, 7, 26),
       phoneNumber: '61928473441',
+      neighborhood: 'Neighborhood',
+      city: 'City',
+      state: 'State',
+      country: 'br',
     };
 
     const output = await registerUserUseCase.execute(input);
@@ -64,6 +68,10 @@ describe('#UC01 RegisterUserUseCase', () => {
       password: 'password',
       birthday: new Date(1960, 7, 26),
       phoneNumber: '61928473441',
+      neighborhood: 'Neighborhood',
+      city: 'City',
+      state: 'State',
+      country: 'br',
     };
 
     const output = await registerUserUseCase.execute(input);
@@ -88,6 +96,10 @@ describe('#UC01 RegisterUserUseCase', () => {
       password: 'password',
       birthday: new Date(1960, 7, 26),
       phoneNumber: '61928473441',
+      neighborhood: 'Neighborhood',
+      city: 'City',
+      state: 'State',
+      country: 'br',
     };
 
     await expect(registerUserUseCase.execute(input)).rejects.toThrow(
@@ -107,6 +119,10 @@ describe('#UC01 RegisterUserUseCase', () => {
       password: 'password',
       birthday: new Date(1990, 7, 26),
       phoneNumber: '61928473441',
+      neighborhood: 'Neighborhood',
+      city: 'City',
+      state: 'State',
+      country: 'br',
     };
 
     await expect(registerUserUseCase.execute(input)).rejects.toThrow(

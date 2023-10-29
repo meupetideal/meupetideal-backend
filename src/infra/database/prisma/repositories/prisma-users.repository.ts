@@ -13,7 +13,10 @@ export class PrismaUsersRepository implements UsersRepository {
   ) {}
 
   public async findById(id: string): Promise<User | undefined> {
-    const user = await this.prismaService.user.findUnique({ where: { id } });
+    const user = await this.prismaService.user.findUnique({
+      include: { address: true },
+      where: { id },
+    });
 
     if (!user) {
       return undefined;
@@ -23,7 +26,10 @@ export class PrismaUsersRepository implements UsersRepository {
   }
 
   public async findByEmail(email: string): Promise<User | undefined> {
-    const user = await this.prismaService.user.findUnique({ where: { email } });
+    const user = await this.prismaService.user.findUnique({
+      include: { address: true },
+      where: { email },
+    });
 
     if (!user) {
       return undefined;
@@ -33,7 +39,10 @@ export class PrismaUsersRepository implements UsersRepository {
   }
 
   public async findByCpf(cpf: string): Promise<User | undefined> {
-    const user = await this.prismaService.user.findUnique({ where: { cpf } });
+    const user = await this.prismaService.user.findUnique({
+      include: { address: true },
+      where: { cpf },
+    });
 
     if (!user) {
       return undefined;
@@ -47,7 +56,7 @@ export class PrismaUsersRepository implements UsersRepository {
       data: PrismaUserMapper.toPrisma(entity),
     });
 
-    DomainEvents.dispatchEventsForAggregate(entity.id);
+    DomainEvents.dispatchEventsForEntity(entity.id);
   }
 
   public async save(entity: User): Promise<void> {

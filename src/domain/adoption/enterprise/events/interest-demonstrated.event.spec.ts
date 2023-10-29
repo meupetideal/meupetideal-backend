@@ -11,11 +11,11 @@ describe('InterestDemonstratedEvent', () => {
     expect(event.ocurredAt).toBeInstanceOf(Date);
   });
 
-  test('getAggregateId', () => {
+  test('getEntityId', () => {
     const interest = InterestBuilder.create().build();
 
     const event = new InterestDemonstratedEvent(interest);
 
-    expect(event.getAggregateId()).toEqual(interest.id);
+    expect(event.getEntityId()).toEqual(interest.id);
   });
 });

@@ -12,7 +12,7 @@ export class InterestDemonstratedEvent implements DomainEvent {
     this.ocurredAt = new Date();
   }
 
-  getAggregateId(): UniqueEntityId {
+  getEntityId(): UniqueEntityId {
     return this.interest.id;
   }
 }

@@ -16,7 +16,7 @@ export class InMemoryPasswordRecoveryTokensRepository
   public async insert(entity: PasswordRecoveryToken): Promise<void> {
     this.items.push(entity);
 
-    DomainEvents.dispatchEventsForAggregate(entity.id);
+    DomainEvents.dispatchEventsForEntity(entity.id);
   }
 
   public async delete(entity: PasswordRecoveryToken): Promise<void> {

@@ -1,7 +1,11 @@
+import { DomainEvent } from './domain-event';
+import { DomainEvents } from './domain-events';
 import { UniqueEntityId } from './unique-entity-id.vo';
 
 export abstract class Entity<Props = unknown> {
   private _id: UniqueEntityId;
+
+  private _domainEvents: DomainEvent[] = [];
 
   protected readonly props: Props;
 
@@ -14,11 +18,24 @@ export abstract class Entity<Props = unknown> {
     return this._id;
   }
 
+  get domainEvents(): DomainEvent[] {
+    return this._domainEvents;
+  }
+
   public equals(entity: Entity<Props>): boolean {
     if (!(entity instanceof Entity)) {
       return false;
     }
 
     return entity.id.equals(this._id);
+  }
+
+  protected addDomainEvent(domainEvent: DomainEvent): void {
+    this._domainEvents.push(domainEvent);
+    DomainEvents.markEntityForDispatch(this);
+  }
+
+  public clearEvents() {
+    this._domainEvents = [];
   }
 }

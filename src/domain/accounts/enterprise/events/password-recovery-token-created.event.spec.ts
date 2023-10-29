@@ -11,11 +11,11 @@ describe('PasswordRecoveryTokenCreatedEvent', () => {
     expect(event.ocurredAt).toBeInstanceOf(Date);
   });
 
-  test('getAggregateId', () => {
+  test('getEntityId', () => {
     const passwordRecoveryToken = PasswordRecoveryTokenBuilder.create().build();
 
     const event = new PasswordRecoveryTokenCreatedEvent(passwordRecoveryToken);
 
-    expect(event.getAggregateId()).toEqual(passwordRecoveryToken.id);
+    expect(event.getEntityId()).toEqual(passwordRecoveryToken.id);
   });
 });
