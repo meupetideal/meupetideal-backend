@@ -1,8 +1,9 @@
 import { Entity } from '@core/enterprise/entity';
 
-export interface SearchInput {
+export interface SearchInput<Filters = Record<string, unknown>> {
   page: number;
   perPage: number;
+  filters?: Filters;
 }
 
 export interface SearchOutput<T extends Entity> {

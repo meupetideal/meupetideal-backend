@@ -1,5 +1,8 @@
 import { inject, injectable } from 'tsyringe';
-import { AnimalsRepository } from '@domain/adoption/application/repositories/animals.repository';
+import {
+  AnimalSearchFilters,
+  AnimalsRepository,
+} from '@domain/adoption/application/repositories/animals.repository';
 import {
   SearchInput,
   SearchMapper,
@@ -20,10 +23,30 @@ export class PrismaAnimalsRepository implements AnimalsRepository {
   public async search({
     page,
     perPage,
-  }: SearchInput): Promise<SearchOutput<Cat | Dog>> {
+    filters,
+  }: SearchInput<AnimalSearchFilters>): Promise<SearchOutput<Cat | Dog>> {
     const animals = await this.prismaService.animal.findMany({
       skip: (page - 1) * perPage,
       take: perPage,
+      where: {
+        approximateAge: {
+          gte: filters?.age?.min,
+          lte: filters?.age?.max,
+        },
+        approximateWeight: {
+          gte: filters?.weight?.min,
+          lte: filters?.weight?.max,
+        },
+        coatColors: filters?.coatColors && { hasSome: filters.coatColors },
+        temperaments: filters?.temperaments && {
+          hasSome: filters.temperaments,
+        },
+        breed: { in: filters?.breeds },
+        size: { in: filters?.sizes },
+        gender: filters?.gender,
+        species: filters?.species,
+        status: 'available',
+      },
     });
 
     const total = await this.prismaService.animal.count();

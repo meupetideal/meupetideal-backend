@@ -8,6 +8,22 @@ import { AnimalsRepository } from '../repositories/animals.repository';
 type Input = {
   page: number;
   perPage: number;
+  filters?: {
+    age?: {
+      min?: number;
+      max?: number;
+    };
+    weight?: {
+      min?: number;
+      max?: number;
+    };
+    gender?: string;
+    species?: string;
+    sizes?: string[];
+    breeds?: string[];
+    coatColors?: string[];
+    temperaments?: string[];
+  };
 };
 
 type Output = SearchOutput<Dog | Cat>;
@@ -19,10 +35,11 @@ export class FetchAvailableAnimalsUseCase implements UseCase<Input, Output> {
     private animalsRepository: AnimalsRepository,
   ) {}
 
-  public async execute({ page, perPage }: Input): Promise<Output> {
+  public async execute({ page, perPage, filters }: Input): Promise<Output> {
     const output = await this.animalsRepository.search({
       page,
       perPage,
+      filters,
     });
 
     return output;
