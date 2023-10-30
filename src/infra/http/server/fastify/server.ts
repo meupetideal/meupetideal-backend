@@ -25,6 +25,7 @@ import { FastifyFetchInterestsFromUserController } from './controllers/fastify-f
 import { FastifyFetchInterestsInAnimalController } from './controllers/fastify-fetch-interests-in-animal.controller';
 import { FastifyFetchNotificationsController } from './controllers/fastify-fetch-notifications.controller';
 import { FastifyOptionsListController } from './controllers/fastify-options-list.controller';
+import { FastifyRefreshTokenController } from './controllers/fastify-refresh-token.controller';
 
 export class FastifyServer implements AppServer {
   private _server: FastifyInstance;
@@ -112,6 +113,11 @@ export class FastifyServer implements AppServer {
         controller: new FastifyAuthenticateUserController(),
         method: 'post',
         path: '/accounts/auth',
+      },
+      {
+        controller: new FastifyRefreshTokenController(),
+        method: 'post',
+        path: '/accounts/auth/refresh',
       },
       {
         controller: new FastifyRecoverPasswordWithEmailController(),

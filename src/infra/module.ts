@@ -21,6 +21,7 @@ import { PrismaInterestsRepository } from './database/prisma/repositories/prisma
 import { PrismaNotificationsRepository } from './database/prisma/repositories/prisma-notifications.repository';
 import { PrismaAnimalPhotosRepository } from './database/prisma/repositories/prisma-animal-photos.repository';
 import { ZohoMail } from './gateways/zoho-mail';
+import { PrismaRefreshTokensRepository } from './database/prisma/repositories/prisma-refresh-tokens.repository';
 
 // Events
 container.registerSingleton('OnUserCreated', OnUserCreated);
@@ -39,6 +40,10 @@ container.registerSingleton('UsersRepository', PrismaUsersRepository);
 container.registerSingleton(
   'PasswordRecoveryTokensRepository',
   PrismaPasswordRecoveryTokensRepository,
+);
+container.registerSingleton(
+  'RefreshTokensRepository',
+  PrismaRefreshTokensRepository,
 );
 container.registerSingleton(
   'AnimalPhotosRepository',

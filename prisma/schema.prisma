@@ -26,6 +26,7 @@ model User {
   address Address?
   animals Animal[]
   interests Interest[]
+  refreshTokens RefreshToken[]
   passwordRecoveryTokens PasswordRecoveryToken[]
   notifications Notification[]
   reporterReports Report[]  @relation("reporter")
@@ -44,6 +45,19 @@ model Address {
   user User @relation(fields: [userId], references: [id])
 
   @@map("addresses")
+}
+
+model RefreshToken {
+  id String @id @default(uuid())
+  userId String @map("user_id")
+  token String @unique
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("refresh_tokens")
 }
 
 model PasswordRecoveryToken {

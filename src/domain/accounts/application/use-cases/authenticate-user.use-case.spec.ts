@@ -2,14 +2,15 @@ import { InMemoryUsersRepository } from 'test/repositories/in-memory-users.repos
 import { FakeHasher } from 'test/gateways/fake-hasher';
 import { FakeEncrypter } from 'test/gateways/fake-encrypter';
 import { UserBuilder } from 'test/data-builders/user.builder';
-import { UsersRepository } from '../repositories/users.repository';
+import { InMemoryRefreshTokensRepository } from 'test/repositories/in-memory-refresh-tokens.repository';
 import { AuthenticateUserUseCase } from './authenticate-user.use-case';
 import { HasherGateway } from '../gateways/hasher';
 import { EncrypterGateway } from '../gateways/encrypter';
 import { WrongCredentialsError } from './errors/wrong-credentials.error';
 
 describe('#UC03 AuthenticateUserUseCase', () => {
-  let usersRepository: UsersRepository;
+  let usersRepository: InMemoryUsersRepository;
+  let refreshTokensRepository: InMemoryRefreshTokensRepository;
   let hasher: HasherGateway;
   let encrypter: EncrypterGateway;
 
@@ -17,11 +18,14 @@ describe('#UC03 AuthenticateUserUseCase', () => {
 
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository();
+    refreshTokensRepository = new InMemoryRefreshTokensRepository();
+
     hasher = new FakeHasher();
     encrypter = new FakeEncrypter();
 
     authenticateUserUseCase = new AuthenticateUserUseCase(
       usersRepository,
+      refreshTokensRepository,
       hasher,
       encrypter,
     );
@@ -33,7 +37,6 @@ describe('#UC03 AuthenticateUserUseCase', () => {
       'findByEmail',
     );
     const hasherCompareSpy = vi.spyOn(hasher, 'compare');
-    const encrypterEncryptSpy = vi.spyOn(encrypter, 'encrypt');
 
     const user = UserBuilder.create()
       .withEmail('test@email.com')
@@ -58,7 +61,6 @@ describe('#UC03 AuthenticateUserUseCase', () => {
       'some-password',
       'some-password-hashed',
     );
-    expect(encrypterEncryptSpy).toHaveBeenCalledWith({ sub: user.id.value });
   });
 
   it('should throw an error if the user does not exists', async () => {
