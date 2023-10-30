@@ -1,20 +1,26 @@
 import { InMemoryAnimalsRepository } from 'test/repositories/in-memory-animals.repository';
 import { Dog } from '@domain/adoption/enterprise/entities/dog';
 import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
+import { FakeStorageGateway } from 'test/gateways/fake-storage';
+import { InMemoryAnimalPhotosRepository } from 'test/repositories/in-memory-animal-photos.repository';
 import { RegisterAnimalForAdoptionUseCase } from './register-animal-for-adoption.use-case';
 import { AnimalsService } from '../services/animals.service';
 
 describe('#UC20 RegisterAnimalForAdoptionUseCase', () => {
   let animalsRepository: InMemoryAnimalsRepository;
+  let animalPhotosRepository: InMemoryAnimalPhotosRepository;
+  let storageGateway: FakeStorageGateway;
 
   let animalsService: AnimalsService;
 
   let registerAnimalForAdoptionUseCase: RegisterAnimalForAdoptionUseCase;
 
   beforeEach(() => {
-    animalsRepository = new InMemoryAnimalsRepository();
+    animalPhotosRepository = new InMemoryAnimalPhotosRepository();
+    animalsRepository = new InMemoryAnimalsRepository(animalPhotosRepository);
+    storageGateway = new FakeStorageGateway();
 
-    animalsService = new AnimalsService(animalsRepository);
+    animalsService = new AnimalsService(animalsRepository, storageGateway);
 
     registerAnimalForAdoptionUseCase = new RegisterAnimalForAdoptionUseCase(
       animalsService,
@@ -39,6 +45,7 @@ describe('#UC20 RegisterAnimalForAdoptionUseCase', () => {
       isNeutered: false,
       isSpecialNeeds: false,
       breed: 'chihuahua',
+      photos: [],
     });
 
     expect(spyInsert).toHaveBeenCalledWith(expect.any(Dog));

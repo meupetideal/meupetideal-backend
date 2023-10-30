@@ -8,6 +8,7 @@ import { AnimalGender } from './value-objects/animal-gender.vo';
 import { AnimalTemperament } from './value-objects/animal-temperament.vo';
 import { AnimalCoatColor } from './value-objects/animal-coat-color.vo';
 import { AnimalStatus } from './value-objects/animal-status.vo';
+import { AnimalPhotoList } from './animal-photo-list';
 
 export interface AnimalProps {
   ownerId: UniqueEntityId;
@@ -24,9 +25,11 @@ export interface AnimalProps {
   isNeutered: boolean;
   isSpecialNeeds: boolean;
   status: AnimalStatus;
+  photos: AnimalPhotoList;
 }
 
-export interface AnimalConstructor extends PickOut<AnimalProps, 'status'> {}
+export interface AnimalConstructor
+  extends PickOut<AnimalProps, 'status' | 'photos'> {}
 
 export abstract class Animal<ChildAnimalProps = unknown> extends Entity<
   AnimalProps & ChildAnimalProps
@@ -35,14 +38,14 @@ export abstract class Animal<ChildAnimalProps = unknown> extends Entity<
     props: AnimalConstructor & ChildAnimalProps,
     id?: UniqueEntityId,
   ) {
-    const status = { status: AnimalStatus.create('available') };
-    const propsWithStatus = {
-      ...status,
+    const propsWithStatusAndPhotos = {
       ...props,
+      status: props.status ?? AnimalStatus.create('available'),
+      photos: props.photos ?? new AnimalPhotoList(),
     };
 
-    Animal.validate(propsWithStatus);
-    super(propsWithStatus, id);
+    Animal.validate(propsWithStatusAndPhotos);
+    super(propsWithStatusAndPhotos, id);
   }
 
   get ownerId(): UniqueEntityId {
@@ -163,6 +166,15 @@ export abstract class Animal<ChildAnimalProps = unknown> extends Entity<
 
   set status(status: AnimalStatus) {
     this.props.status = status;
+    this._touch();
+  }
+
+  get photos() {
+    return this.props.photos;
+  }
+
+  set photos(photos: AnimalPhotoList) {
+    this.props.photos = photos;
     this._touch();
   }
 

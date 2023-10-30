@@ -4,23 +4,29 @@ import { UserBuilder } from 'test/data-builders/user.builder';
 import { InMemoryUsersRepository } from 'test/repositories/in-memory-users.repository';
 import { DogBuilder } from 'test/data-builders/dog.builder';
 import { Dog } from '@domain/adoption/enterprise/entities/dog';
+import { InMemoryAnimalPhotosRepository } from 'test/repositories/in-memory-animal-photos.repository';
+import { FakeStorageGateway } from 'test/gateways/fake-storage';
 import { MarkAnimalAsAdoptedUseCase } from './mark-animal-as-adopted.use-case';
 import { AnimalNotFoundError } from './errors/animal-not-found.error';
 import { UserNotOwnsTheAnimalError } from './errors/user-not-owns-the-animal.error';
 import { AnimalsService } from '../services/animals.service';
 
 describe('#UC15 MarkAnimalAsAdoptedUseCase', () => {
+  let animalPhotosRepository: InMemoryAnimalPhotosRepository;
   let animalsRepository: InMemoryAnimalsRepository;
   let usersRepository: InMemoryUsersRepository;
+  let storageGateway: FakeStorageGateway;
 
   let animalsService: AnimalsService;
 
   let markAnimalAsAdoptedUseCase: MarkAnimalAsAdoptedUseCase;
 
   beforeEach(() => {
-    animalsRepository = new InMemoryAnimalsRepository();
+    storageGateway = new FakeStorageGateway();
+    animalPhotosRepository = new InMemoryAnimalPhotosRepository();
+    animalsRepository = new InMemoryAnimalsRepository(animalPhotosRepository);
     usersRepository = new InMemoryUsersRepository();
-    animalsService = new AnimalsService(animalsRepository);
+    animalsService = new AnimalsService(animalsRepository, storageGateway);
 
     markAnimalAsAdoptedUseCase = new MarkAnimalAsAdoptedUseCase(
       animalsService,

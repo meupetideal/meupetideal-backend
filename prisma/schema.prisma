@@ -79,10 +79,21 @@ model Animal {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   owner User @relation(fields: [ownerId], references: [id])
+  photos AnimalPhoto[]
   interests Interest[]
   reports Report[]
 
   @@map("animals")
+}
+
+model AnimalPhoto {
+  id String @id @default(uuid())
+  animalId String @map("animal_id")
+  photoUrl String @map("photo_url")
+
+  animal Animal @relation(fields: [animalId], references: [id])
+
+  @@map("animal_photos")
 }
 
 model Report {

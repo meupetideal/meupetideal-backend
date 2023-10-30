@@ -6,6 +6,7 @@ import { InterestBuilder } from 'test/data-builders/interest.builder';
 import { InterestsRepository } from '@domain/adoption/application/repositories/interests.repository';
 import { SpyInstance } from 'vitest';
 import { InMemoryInterestsRepository } from 'test/repositories/in-memory-interests.repository';
+import { InMemoryAnimalPhotosRepository } from 'test/repositories/in-memory-animal-photos.repository';
 import { OnAnimalInterestDemonstrated } from './on-animal-interest-demonstrated';
 import {
   SendNotificationInput,
@@ -14,6 +15,7 @@ import {
 } from '../use-cases/send-notification.use-case';
 
 describe('On Interest Created', () => {
+  let animalPhotosRepository: InMemoryAnimalPhotosRepository;
   let animalsRepository: InMemoryAnimalsRepository;
   let interestsRepository: InterestsRepository;
   let notificationsRepository: InMemoryNotificationsRepository;
@@ -26,7 +28,8 @@ describe('On Interest Created', () => {
   >;
 
   beforeEach(() => {
-    animalsRepository = new InMemoryAnimalsRepository();
+    animalPhotosRepository = new InMemoryAnimalPhotosRepository();
+    animalsRepository = new InMemoryAnimalsRepository(animalPhotosRepository);
     interestsRepository = new InMemoryInterestsRepository();
     notificationsRepository = new InMemoryNotificationsRepository();
 

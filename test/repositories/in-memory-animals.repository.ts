@@ -4,6 +4,7 @@ import {
   SearchOutput,
 } from '@core/application/pagination';
 import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
+import { AnimalPhotosRepository } from '@domain/adoption/application/repositories/animal-photos.repository';
 import {
   AnimalSearchFilters,
   AnimalsRepository,
@@ -15,6 +16,8 @@ type Item = Cat | Dog;
 
 export class InMemoryAnimalsRepository implements AnimalsRepository {
   public items: Item[] = [];
+
+  constructor(private animalPhotosRepository: AnimalPhotosRepository) {}
 
   public async search({
     page,
@@ -50,6 +53,8 @@ export class InMemoryAnimalsRepository implements AnimalsRepository {
 
   public async insert(entity: Item): Promise<void> {
     this.items.push(entity);
+
+    await this.animalPhotosRepository.createMany(entity.photos.getItems());
   }
 
   public async save(entity: Item): Promise<void> {

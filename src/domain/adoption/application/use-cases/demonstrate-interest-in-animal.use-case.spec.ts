@@ -4,6 +4,8 @@ import { DogBuilder } from 'test/data-builders/dog.builder';
 import { InterestBuilder } from 'test/data-builders/interest.builder';
 import { UserBuilder } from 'test/data-builders/user.builder';
 import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
+import { InMemoryAnimalPhotosRepository } from 'test/repositories/in-memory-animal-photos.repository';
+import { FakeStorageGateway } from 'test/gateways/fake-storage';
 import { DemonstrateInterestInAnimalUseCase } from './demonstrate-interest-in-animal.use-case';
 import { AnimalNotFoundError } from './errors/animal-not-found.error';
 import { AnimalIsUnavailableError } from './errors/animal-is-unavailable.error';
@@ -13,8 +15,10 @@ import { AnimalsService } from '../services/animals.service';
 import { InterestsService } from '../services/interests.service';
 
 describe('#UC16 DemonstrateInterestInAnimalUseCase', () => {
+  let animalPhotosRepository: InMemoryAnimalPhotosRepository;
   let animalsRepository: InMemoryAnimalsRepository;
   let interestsRepository: InMemoryInterestsRepository;
+  let storageGateway: FakeStorageGateway;
 
   let interestsService: InterestsService;
 
@@ -23,11 +27,13 @@ describe('#UC16 DemonstrateInterestInAnimalUseCase', () => {
   let sut: DemonstrateInterestInAnimalUseCase;
 
   beforeEach(() => {
-    animalsRepository = new InMemoryAnimalsRepository();
+    storageGateway = new FakeStorageGateway();
+    animalPhotosRepository = new InMemoryAnimalPhotosRepository();
+    animalsRepository = new InMemoryAnimalsRepository(animalPhotosRepository);
     interestsRepository = new InMemoryInterestsRepository();
 
     interestsService = new InterestsService(interestsRepository);
-    animalsService = new AnimalsService(animalsRepository);
+    animalsService = new AnimalsService(animalsRepository, storageGateway);
 
     sut = new DemonstrateInterestInAnimalUseCase(
       animalsService,

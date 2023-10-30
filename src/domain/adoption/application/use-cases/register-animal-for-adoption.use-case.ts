@@ -19,6 +19,11 @@ type Input = {
   isNeutered: boolean;
   isSpecialNeeds: boolean;
   breed: string;
+  photos: Array<{
+    fileName: string;
+    fileType: string;
+    body: Buffer;
+  }>;
 };
 
 type Output = {
@@ -49,6 +54,7 @@ export class RegisterAnimalForAdoptionUseCase
     isNeutered,
     isSpecialNeeds,
     breed,
+    photos,
   }: Input): Promise<Output> {
     const animal = await this.animalsService.register({
       species,
@@ -65,6 +71,7 @@ export class RegisterAnimalForAdoptionUseCase
       isNeutered,
       isSpecialNeeds,
       breed,
+      photos,
     });
 
     return { animal };

@@ -7,12 +7,7 @@ import { container } from 'tsyringe';
 export class FastifyUpdateUserAvatarController implements Controller {
   public async handle(request: FastifyRequest, reply: FastifyReply) {
     const userId = request.user.id;
-    const file = await request.file({
-      limits: {
-        fileSize: 1024 * 1024 * 1,
-        files: 1,
-      },
-    });
+    const file = await request.file();
 
     if (!file) {
       throw new ValidationError('File not found');

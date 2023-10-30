@@ -1,7 +1,7 @@
 import { EntityValidationError } from '@core/enterprise/errors/validation.error';
 import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
 import { PickOut } from '@core/enterprise/logic/pick-out';
-import { Entity } from '@core/enterprise/Entity';
+import { Entity } from '@core/enterprise/entity';
 import { InterestValidatorFactory } from '../validators/interest.validator';
 import { InterestDemonstratedEvent } from '../events/interest-demonstrated.event';
 

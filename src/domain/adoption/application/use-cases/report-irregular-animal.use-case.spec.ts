@@ -2,21 +2,27 @@ import { InMemoryAnimalsRepository } from 'test/repositories/in-memory-animals.r
 import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
 import { Report } from '@domain/adoption/enterprise/entities/report';
 import { DogBuilder } from 'test/data-builders/dog.builder';
+import { InMemoryAnimalPhotosRepository } from 'test/repositories/in-memory-animal-photos.repository';
+import { FakeStorageGateway } from 'test/gateways/fake-storage';
 import { ReportIrregularAnimalUseCase } from './report-irregular-animal.use-case';
 import { AnimalNotFoundError } from './errors/animal-not-found.error';
 import { AnimalsService } from '../services/animals.service';
 
 describe('#UC213 ReportIrregularAnimalUseCase', () => {
   let animalsRepository: InMemoryAnimalsRepository;
+  let animalPhotosRepository: InMemoryAnimalPhotosRepository;
+  let storageGateway: FakeStorageGateway;
 
   let animalsService: AnimalsService;
 
   let reportIrregularAnimalUseCase: ReportIrregularAnimalUseCase;
 
   beforeEach(() => {
-    animalsRepository = new InMemoryAnimalsRepository();
+    storageGateway = new FakeStorageGateway();
+    animalPhotosRepository = new InMemoryAnimalPhotosRepository();
+    animalsRepository = new InMemoryAnimalsRepository(animalPhotosRepository);
 
-    animalsService = new AnimalsService(animalsRepository);
+    animalsService = new AnimalsService(animalsRepository, storageGateway);
 
     reportIrregularAnimalUseCase = new ReportIrregularAnimalUseCase(
       animalsService,

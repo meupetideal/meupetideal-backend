@@ -16,6 +16,7 @@ import { DiskStorage } from './gateways/disk-storage';
 import { PrismaAnimalsRepository } from './database/prisma/repositories/prisma-animals.repository';
 import { PrismaInterestsRepository } from './database/prisma/repositories/prisma-interests.repository';
 import { PrismaNotificationsRepository } from './database/prisma/repositories/prisma-notifications.repository';
+import { PrismaAnimalPhotosRepository } from './database/prisma/repositories/prisma-animal-photos.repository';
 
 // Repositories
 container.registerSingleton('PrismaService', PrismaService);
@@ -23,6 +24,10 @@ container.registerSingleton('UsersRepository', PrismaUsersRepository);
 container.registerSingleton(
   'PasswordRecoveryTokensRepository',
   PrismaPasswordRecoveryTokensRepository,
+);
+container.registerSingleton(
+  'AnimalPhotosRepository',
+  PrismaAnimalPhotosRepository,
 );
 container.registerSingleton('AnimalsRepository', PrismaAnimalsRepository);
 container.registerSingleton('InterestsRepository', PrismaInterestsRepository);

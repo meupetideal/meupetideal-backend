@@ -11,15 +11,15 @@ const bodySchema = z.object({
   species: z.enum(['dog', 'cat']),
   name: z.string(),
   gender: z.string(),
-  approximateAge: z.number().positive(),
-  approximateWeight: z.number().positive(),
+  approximateAge: z.coerce.number().positive(),
+  approximateWeight: z.coerce.number().positive(),
   size: z.string(),
-  temperaments: z.array(z.string()),
-  coatColors: z.array(z.string()),
-  isVaccinated: z.boolean(),
-  isDewormed: z.boolean(),
-  isNeutered: z.boolean(),
-  isSpecialNeeds: z.boolean(),
+  temperaments: z.string().transform((value) => value.split(',')),
+  coatColors: z.string().transform((value) => value.split(',')),
+  isVaccinated: z.coerce.boolean(),
+  isDewormed: z.coerce.boolean(),
+  isNeutered: z.coerce.boolean(),
+  isSpecialNeeds: z.coerce.boolean(),
   breed: z.string(),
 });
 
@@ -28,8 +28,24 @@ type BodySchema = z.infer<typeof bodySchema>;
 export class FastifyRegisterAnimalForAdoptionController implements Controller {
   public async handle(request: FastifyRequest, reply: FastifyReply) {
     const userId = request.user.id;
+    const parts = request.parts();
+    const body = {
+      photos: [],
+    } as any;
 
-    const validationPipe = new ZodValidationPipe<BodySchema>(bodySchema);
+    for await (const part of parts) {
+      if (part.type === 'file') {
+        body.photos.push({
+          fileName: part.filename,
+          fileType: part.mimetype,
+          body: await part.toBuffer(),
+        });
+      } else {
+        body[part.fieldname] = part.value;
+      }
+    }
+
+    const validationPipe = new ZodValidationPipe<BodySchema>(bodySchema as any);
     const {
       species,
       name,
@@ -44,7 +60,7 @@ export class FastifyRegisterAnimalForAdoptionController implements Controller {
       isNeutered,
       isSpecialNeeds,
       breed,
-    } = validationPipe.transform(request.body);
+    } = validationPipe.transform(body);
 
     const useCase = container.resolve(RegisterAnimalForAdoptionUseCase);
 
@@ -63,6 +79,7 @@ export class FastifyRegisterAnimalForAdoptionController implements Controller {
       isNeutered,
       isSpecialNeeds,
       breed,
+      photos: body.photos,
     });
 
     return reply.send({ animal: HttpAnimalPresenter.toHttp(output.animal) });

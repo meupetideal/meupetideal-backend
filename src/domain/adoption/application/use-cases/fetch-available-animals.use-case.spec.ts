@@ -3,15 +3,18 @@ import { Dog } from '@domain/adoption/enterprise/entities/dog';
 import { CatBuilder } from 'test/data-builders/cat.builder';
 import { Cat } from '@domain/adoption/enterprise/entities/cat';
 import { DogBuilder } from 'test/data-builders/dog.builder';
+import { InMemoryAnimalPhotosRepository } from 'test/repositories/in-memory-animal-photos.repository';
 import { FetchAvailableAnimalsUseCase } from './fetch-available-animals.use-case';
 
 describe('#UC16 FetchAvailableAnimalsUseCase', () => {
   let animalsRepository: InMemoryAnimalsRepository;
+  let animalPhotosRepository: InMemoryAnimalPhotosRepository;
 
   let fetchAvailableAnimalsUseCase: FetchAvailableAnimalsUseCase;
 
   beforeEach(() => {
-    animalsRepository = new InMemoryAnimalsRepository();
+    animalPhotosRepository = new InMemoryAnimalPhotosRepository();
+    animalsRepository = new InMemoryAnimalsRepository(animalPhotosRepository);
 
     fetchAvailableAnimalsUseCase = new FetchAvailableAnimalsUseCase(
       animalsRepository,

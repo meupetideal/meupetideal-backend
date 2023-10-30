@@ -2,24 +2,30 @@ import { InMemoryInterestsRepository } from 'test/repositories/in-memory-interes
 import { InterestBuilder } from 'test/data-builders/interest.builder';
 import { DogBuilder } from 'test/data-builders/dog.builder';
 import { InMemoryAnimalsRepository } from 'test/repositories/in-memory-animals.repository';
+import { InMemoryAnimalPhotosRepository } from 'test/repositories/in-memory-animal-photos.repository';
+import { FakeStorageGateway } from 'test/gateways/fake-storage';
 import { FetchInterestsInAnimalUseCase } from './fetch-interests-in-animal.use-case';
 import { AnimalNotFoundError } from './errors/animal-not-found.error';
 import { UserNotOwnsTheAnimalError } from './errors/user-not-owns-the-animal.error';
 import { AnimalsService } from '../services/animals.service';
 
 describe('#UC21 FetchInterestsInAnimalUseCase', () => {
+  let animalPhotosRepository: InMemoryAnimalPhotosRepository;
   let interestsRepository: InMemoryInterestsRepository;
   let animalsRepository: InMemoryAnimalsRepository;
+  let storageGateway: FakeStorageGateway;
 
   let animalsService: AnimalsService;
 
   let sut: FetchInterestsInAnimalUseCase;
 
   beforeEach(() => {
+    storageGateway = new FakeStorageGateway();
+    animalPhotosRepository = new InMemoryAnimalPhotosRepository();
     interestsRepository = new InMemoryInterestsRepository();
-    animalsRepository = new InMemoryAnimalsRepository();
+    animalsRepository = new InMemoryAnimalsRepository(animalPhotosRepository);
 
-    animalsService = new AnimalsService(animalsRepository);
+    animalsService = new AnimalsService(animalsRepository, storageGateway);
 
     sut = new FetchInterestsInAnimalUseCase(
       animalsService,

@@ -10,6 +10,7 @@ import {
 } from '@core/application/pagination';
 import { Cat } from '@domain/adoption/enterprise/entities/cat';
 import { Dog } from '@domain/adoption/enterprise/entities/dog';
+import { AnimalPhotosRepository } from '@domain/adoption/application/repositories/animal-photos.repository';
 import { PrismaService } from '../prisma.service';
 import { PrismaAnimalMapper } from '../mappers/prisma-animals.mapper';
 
@@ -18,6 +19,8 @@ export class PrismaAnimalsRepository implements AnimalsRepository {
   constructor(
     @inject('PrismaService')
     private prismaService: PrismaService,
+    @inject('AnimalPhotosRepository')
+    private animalPhotosRepository: AnimalPhotosRepository,
   ) {}
 
   public async search({
@@ -80,6 +83,8 @@ export class PrismaAnimalsRepository implements AnimalsRepository {
     await this.prismaService.animal.create({
       data: PrismaAnimalMapper.toPrisma(entity),
     });
+
+    await this.animalPhotosRepository.createMany(entity.photos.getItems());
   }
 
   public async save(entity: Cat | Dog): Promise<void> {

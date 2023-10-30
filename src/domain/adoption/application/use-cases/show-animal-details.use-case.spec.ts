@@ -3,21 +3,27 @@ import { Dog } from '@domain/adoption/enterprise/entities/dog';
 import { CatBuilder } from 'test/data-builders/cat.builder';
 import { Cat } from '@domain/adoption/enterprise/entities/cat';
 import { DogBuilder } from 'test/data-builders/dog.builder';
+import { InMemoryAnimalPhotosRepository } from 'test/repositories/in-memory-animal-photos.repository';
+import { FakeStorageGateway } from 'test/gateways/fake-storage';
 import { ShowAnimalDetailsUseCase } from './show-animal-details.use-case';
 import { AnimalNotFoundError } from './errors/animal-not-found.error';
 import { AnimalsService } from '../services/animals.service';
 
 describe('#UC22 ShowAnimalDetailsUseCase', () => {
   let animalsRepository: InMemoryAnimalsRepository;
+  let animalPhotosRepository: InMemoryAnimalPhotosRepository;
+  let storageGateway: FakeStorageGateway;
 
   let animalsService: AnimalsService;
 
   let showAnimalDetailsUseCase: ShowAnimalDetailsUseCase;
 
   beforeEach(() => {
-    animalsRepository = new InMemoryAnimalsRepository();
+    storageGateway = new FakeStorageGateway();
+    animalPhotosRepository = new InMemoryAnimalPhotosRepository();
+    animalsRepository = new InMemoryAnimalsRepository(animalPhotosRepository);
 
-    animalsService = new AnimalsService(animalsRepository);
+    animalsService = new AnimalsService(animalsRepository, storageGateway);
 
     showAnimalDetailsUseCase = new ShowAnimalDetailsUseCase(animalsService);
   });

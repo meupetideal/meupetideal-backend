@@ -1,5 +1,6 @@
 import { Cat } from '@domain/adoption/enterprise/entities/cat';
 import { Dog } from '@domain/adoption/enterprise/entities/dog';
+import { HttpAnimalPhotoPresenter } from './http-animal-photo.presenter';
 
 export class HttpAnimalPresenter {
   static toHttp(animal: Dog | Cat) {
@@ -20,6 +21,9 @@ export class HttpAnimalPresenter {
       isSpecialNeeds: animal.isSpecialNeeds,
       status: animal.status.value,
       breed: animal.breed.value,
+      photos: animal.photos
+        .getItems()
+        .map((photo) => HttpAnimalPhotoPresenter.toHttp(photo)),
     };
   }
 }

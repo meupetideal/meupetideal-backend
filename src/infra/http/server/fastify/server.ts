@@ -43,10 +43,19 @@ export class FastifyServer implements AppServer {
     await this.registerHandlers();
     await this.registerRoutes();
 
+    this._server.get('/health-check', async (_, reply) =>
+      reply.status(200).send(),
+    );
+
     try {
-      await this._server.listen({ port });
+      const host = '0.0.0.0';
+      await this._server.listen({
+        host,
+        port,
+      });
       console.log(`Server running on port ${port}`);
     } catch (error) {
+      console.log(error);
       process.exit(1);
     }
   }
@@ -62,6 +71,16 @@ export class FastifyServer implements AppServer {
         return reply.status(error.statusCode).send({
           ...error.format(),
           validationErrors,
+        });
+      }
+
+      if (error.constructor.name === 'FastifyError') {
+        return reply.status(error.statusCode ?? 500).send({
+          type: error.code,
+          message: error.message,
+          code: error.statusCode,
+          statusCode: error.statusCode,
+          timestamp: new Date(),
         });
       }
 
