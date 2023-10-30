@@ -1,20 +1,23 @@
-import nodemailer, { Transporter, SendMailOptions } from 'nodemailer';
 import {
   MailGateway,
   SendMailInput,
 } from '@domain/emails/application/gateways/mail';
+import nodemailer, { SendMailOptions, Transporter } from 'nodemailer';
+import { injectable } from 'tsyringe';
 
-export class MailtrapMail implements MailGateway {
+@injectable()
+export class ZohoMail implements MailGateway {
   private client: Transporter;
 
   constructor() {
     const transporter = nodemailer.createTransport({
-      host: process.env.MAILTRAP_HOST,
-      port: Number(process.env.MAILTRAP_PORT),
+      host: process.env.ZOHO_HOST,
+      port: Number(process.env.ZOHO_PORT),
       auth: {
-        user: process.env.MAILTRAP_USER,
-        pass: process.env.MAILTRAP_PASS,
+        user: process.env.ZOHO_USER,
+        pass: process.env.ZOHO_PASS,
       },
+      secure: true,
     });
 
     this.client = transporter;
