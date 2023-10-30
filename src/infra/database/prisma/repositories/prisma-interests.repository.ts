@@ -1,6 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 import { InterestsRepository } from '@domain/adoption/application/repositories/interests.repository';
 import { Interest } from '@domain/adoption/enterprise/entities/interest';
+import { DomainEvents } from '@core/enterprise/domain-events';
 import { PrismaService } from '../prisma.service';
 import { PrismaInterestMapper } from '../mappers/prisma-interests.mapper';
 
@@ -47,5 +48,7 @@ export class PrismaInterestsRepository implements InterestsRepository {
     await this.prismaService.interest.create({
       data: PrismaInterestMapper.toPrisma(entity),
     });
+
+    DomainEvents.dispatchEventsForEntity(entity.id);
   }
 }
