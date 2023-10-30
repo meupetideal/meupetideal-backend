@@ -1,6 +1,7 @@
 import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
 import { Notification } from '@domain/notifications/enterprise/entities/notification';
 import { UseCase } from '@core/application/use-case';
+import { inject, injectable } from 'tsyringe';
 import { NotificationsRepository } from '../repositories/notifications.repository';
 
 export type SendNotificationInput = {
@@ -13,10 +14,14 @@ export type SendNotificationOutput = {
   notification: Notification;
 };
 
+@injectable()
 export class SendNotificationUseCase
   implements UseCase<SendNotificationInput, SendNotificationOutput>
 {
-  constructor(private notificationsRepository: NotificationsRepository) {}
+  constructor(
+    @inject('NotificationsRepository')
+    private notificationsRepository: NotificationsRepository,
+  ) {}
 
   async execute({
     recipientId,

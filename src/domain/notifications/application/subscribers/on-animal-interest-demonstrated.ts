@@ -2,11 +2,15 @@ import { EventHandler } from '@core/application/event-handler';
 import { DomainEvents } from '@core/enterprise/domain-events';
 import { InterestDemonstratedEvent } from '@domain/adoption/enterprise/events/interest-demonstrated.event';
 import { AnimalsRepository } from '@domain/adoption/application/repositories/animals.repository';
+import { inject, injectable } from 'tsyringe';
 import { SendNotificationUseCase } from '../use-cases/send-notification.use-case';
 
+@injectable()
 export class OnAnimalInterestDemonstrated implements EventHandler {
   constructor(
+    @inject('AnimalsRepository')
     private animalsRepository: AnimalsRepository,
+    @inject('SendNotificationUseCase')
     private sendNotification: SendNotificationUseCase,
   ) {
     this.setupSubscriptions();

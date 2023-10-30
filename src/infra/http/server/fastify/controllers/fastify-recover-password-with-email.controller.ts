@@ -8,7 +8,6 @@ import { ZodValidationPipe } from 'src/infra/http/pipes/zod-validation.pipe';
 
 const bodySchema = z.object({
   email: z.string().email(),
-  password: z.string(),
 });
 
 type BodySchema = z.infer<typeof bodySchema>;

@@ -5,6 +5,10 @@ import { PasswordRecoveryTokensService } from '@domain/accounts/application/serv
 import { OnUserCreated } from '@domain/emails/application/subscribers/on-user-created';
 import { AnimalsService } from '@domain/adoption/application/services/animals.service';
 import { InterestsService } from '@domain/adoption/application/services/interests.service';
+import { MailService } from '@domain/emails/application/services/mail.service';
+import { OnPasswordRecoveryTokenCreated } from '@domain/emails/application/subscribers/on-password-recovery-token-created';
+import { OnAnimalInterestDemonstrated } from '@domain/notifications/application/subscribers/on-animal-interest-demonstrated';
+import { SendNotificationUseCase } from '@domain/notifications/application/use-cases/send-notification.use-case';
 import { PrismaUsersRepository } from './database/prisma/repositories/prisma-users.repository';
 import { PrismaService } from './database/prisma/prisma.service';
 import { BcryptHasher } from './gateways/bcrypt-hasher';
@@ -17,6 +21,17 @@ import { PrismaAnimalsRepository } from './database/prisma/repositories/prisma-a
 import { PrismaInterestsRepository } from './database/prisma/repositories/prisma-interests.repository';
 import { PrismaNotificationsRepository } from './database/prisma/repositories/prisma-notifications.repository';
 import { PrismaAnimalPhotosRepository } from './database/prisma/repositories/prisma-animal-photos.repository';
+
+// Events
+container.registerSingleton('OnUserCreated', OnUserCreated);
+container.registerSingleton(
+  'OnPasswordRecoveryTokenCreated',
+  OnPasswordRecoveryTokenCreated,
+);
+container.registerSingleton(
+  'OnAnimalInterestDemonstrated',
+  OnAnimalInterestDemonstrated,
+);
 
 // Repositories
 container.registerSingleton('PrismaService', PrismaService);
@@ -44,6 +59,7 @@ container.registerSingleton('MailTemplateGateway', HandlebarsMailTemplate);
 container.registerSingleton('StorageGateway', DiskStorage);
 
 // Services
+container.registerSingleton('MailService', MailService);
 container.registerSingleton('UsersService', UsersService);
 container.registerSingleton(
   'PasswordRecoveryTokensService',
@@ -52,5 +68,10 @@ container.registerSingleton(
 container.registerSingleton('AnimalsService', AnimalsService);
 container.registerSingleton('InterestsService', InterestsService);
 
-// Events
-container.registerSingleton('OnUserCreated', OnUserCreated);
+// UseCases
+container.registerSingleton('SendNotificationUseCase', SendNotificationUseCase);
+
+// Subscribers
+container.resolve(OnUserCreated);
+container.resolve(OnPasswordRecoveryTokenCreated);
+container.resolve(OnAnimalInterestDemonstrated);

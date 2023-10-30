@@ -7,6 +7,17 @@ import { injectable } from 'tsyringe';
 
 @injectable()
 export class HandlebarsMailTemplate implements MailTemplateGateway {
+  private BASE_PATH = path.resolve(
+    __dirname,
+    '..',
+    '..',
+    'domain',
+    'emails',
+    'application',
+    'gateways',
+    'templates',
+  );
+
   constructor() {
     this.registerPartials();
     this.registerHelpers();
@@ -16,8 +27,12 @@ export class HandlebarsMailTemplate implements MailTemplateGateway {
     template: string,
     variables: Record<string, unknown>,
   ): Promise<string> {
-    const parseTemplate = Handlebars.compile(template);
+    const file = path.resolve(this.BASE_PATH, `${template}.html`);
+    const templateFileContent = await fs.promises.readFile(file, {
+      encoding: 'utf-8',
+    });
 
+    const parseTemplate = Handlebars.compile(templateFileContent);
     return parseTemplate(variables);
   }
 
@@ -44,7 +59,7 @@ export class HandlebarsMailTemplate implements MailTemplateGateway {
       },
       {
         name: 'components',
-        path: path.resolve(...templatesPaths, 'inclucomponentsdes'),
+        path: path.resolve(...templatesPaths, 'components'),
       },
     ];
 

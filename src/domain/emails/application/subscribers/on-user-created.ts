@@ -1,10 +1,10 @@
 import { EventHandler } from '@core/application/event-handler';
 import { DomainEvents } from '@core/enterprise/domain-events';
 import { UserCreatedEvent } from '@domain/accounts/enterprise/events/user-created.event';
-import { inject, injectable } from 'tsyringe';
+import { inject, singleton } from 'tsyringe';
 import { MailService } from '../services/mail.service';
 
-@injectable()
+@singleton()
 export class OnUserCreated implements EventHandler {
   constructor(
     @inject('MailService')
@@ -24,7 +24,7 @@ export class OnUserCreated implements EventHandler {
     await this.mailService.sendWithTemplate({
       to: {
         name: user.name,
-        email: user.email,
+        email: user.email.value,
       },
       subject: 'Boas vindas ao MeuPetIdeal!',
       template: 'new-user',
