@@ -2,6 +2,7 @@ import { ValidationError } from '@core/enterprise/errors/validation.error';
 import { Controller } from '@core/infra/controller';
 import { UpdateUserAvatarUseCase } from '@domain/accounts/application/use-cases/update-user-avatar.use-case';
 import { FastifyReply, FastifyRequest } from 'fastify';
+import { HttpStoragePresenter } from 'src/infra/http/presenters/http-storage.presenter';
 import { container } from 'tsyringe';
 
 export class FastifyUpdateUserAvatarController implements Controller {
@@ -22,6 +23,8 @@ export class FastifyUpdateUserAvatarController implements Controller {
       fileType: file.mimetype,
     });
 
-    return reply.send(output);
+    return reply.send({
+      avatarUrl: HttpStoragePresenter.toHttp(output.avatarUrl),
+    });
   }
 }

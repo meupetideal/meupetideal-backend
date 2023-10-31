@@ -64,4 +64,26 @@ export class PrismaUserMapper {
       },
     };
   }
+
+  static toPrismaUpdate(user: User): Prisma.UserUncheckedUpdateInput {
+    const address = user.address.value;
+
+    return {
+      name: user.name,
+      cpf: user.cpf.value,
+      email: user.email.value,
+      hashedPassword: user.hashedPassword,
+      birthday: user.birthday.value,
+      phoneNumber: user.phoneNumber.value,
+      avatarUrl: user.avatarUrl ?? null,
+      address: {
+        update: {
+          neighborhood: address.neighborhood,
+          city: address.city,
+          state: address.state,
+          country: address.country.value,
+        },
+      },
+    };
+  }
 }

@@ -61,8 +61,9 @@ export class PrismaUsersRepository implements UsersRepository {
 
   public async save(entity: User): Promise<void> {
     await this.prismaService.user.update({
+      include: { address: true },
       where: { id: entity.id.value },
-      data: PrismaUserMapper.toPrisma(entity),
+      data: PrismaUserMapper.toPrismaUpdate(entity),
     });
   }
 }

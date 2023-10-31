@@ -1,4 +1,5 @@
 import { User } from '@domain/accounts/enterprise/entities/user';
+import { HttpStoragePresenter } from './http-storage.presenter';
 
 export class HttpUserPresenter {
   static toHttp(user: User) {
@@ -11,7 +12,7 @@ export class HttpUserPresenter {
       email: user.email.value,
       birthday: user.birthday.value,
       phoneNumber: user.phoneNumber.format(),
-      avatarUrl: user.avatarUrl ?? null,
+      avatarUrl: HttpStoragePresenter.toHttp(user.avatarUrl),
       address: {
         neighborhood: address.neighborhood,
         city: address.city,

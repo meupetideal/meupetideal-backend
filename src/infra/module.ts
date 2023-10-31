@@ -15,13 +15,13 @@ import { BcryptHasher } from './gateways/bcrypt-hasher';
 import { JwtEncrypter } from './gateways/jwt-encrypter';
 import { PrismaPasswordRecoveryTokensRepository } from './database/prisma/repositories/prisma-password-recovery-tokens.repository';
 import { HandlebarsMailTemplate } from './gateways/handlebars-mail-template';
-import { DiskStorage } from './gateways/disk-storage';
 import { PrismaAnimalsRepository } from './database/prisma/repositories/prisma-animals.repository';
 import { PrismaInterestsRepository } from './database/prisma/repositories/prisma-interests.repository';
 import { PrismaNotificationsRepository } from './database/prisma/repositories/prisma-notifications.repository';
 import { PrismaAnimalPhotosRepository } from './database/prisma/repositories/prisma-animal-photos.repository';
 import { ZohoMail } from './gateways/zoho-mail';
 import { PrismaRefreshTokensRepository } from './database/prisma/repositories/prisma-refresh-tokens.repository';
+import { FirebaseStorage } from './gateways/firebase-storage';
 
 // Events
 container.registerSingleton('OnUserCreated', OnUserCreated);
@@ -61,7 +61,7 @@ container.registerSingleton('HasherGateway', BcryptHasher);
 container.registerSingleton('EncrypterGateway', JwtEncrypter);
 container.registerSingleton('MailGateway', ZohoMail);
 container.registerSingleton('MailTemplateGateway', HandlebarsMailTemplate);
-container.registerSingleton('StorageGateway', DiskStorage);
+container.registerSingleton('StorageGateway', FirebaseStorage);
 
 // Services
 container.registerSingleton('MailService', MailService);
