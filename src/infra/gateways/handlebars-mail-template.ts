@@ -11,6 +11,7 @@ export class HandlebarsMailTemplate implements MailTemplateGateway {
     __dirname,
     '..',
     '..',
+    process.env.NODE_ENV === 'production' ? 'dist' : 'src',
     'domain',
     'emails',
     'application',
@@ -37,29 +38,18 @@ export class HandlebarsMailTemplate implements MailTemplateGateway {
   }
 
   private async registerPartials(): Promise<void> {
-    const templatesPaths = [
-      __dirname,
-      '..',
-      '..',
-      'domain',
-      'emails',
-      'application',
-      'gateways',
-      'templates',
-    ];
-
     const partials = [
       {
         name: 'includes',
-        path: path.resolve(...templatesPaths, 'includes'),
+        path: path.resolve(this.BASE_PATH, 'includes'),
       },
       {
         name: 'layouts',
-        path: path.resolve(...templatesPaths, 'layouts'),
+        path: path.resolve(this.BASE_PATH, 'layouts'),
       },
       {
         name: 'components',
-        path: path.resolve(...templatesPaths, 'components'),
+        path: path.resolve(this.BASE_PATH, 'components'),
       },
     ];
 
