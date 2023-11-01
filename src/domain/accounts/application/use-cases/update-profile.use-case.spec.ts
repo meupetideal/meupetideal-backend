@@ -50,10 +50,10 @@ describe('#UC06 UpdateProfileUseCase', () => {
     const { user } = output;
 
     expect(user.name).toBe(input.name);
-    expect(user.email).toBe(input.email);
-    expect(user.cpf).toBe(input.cpf);
-    expect(user.birthday).toBe(input.birthday);
-    expect(user.phoneNumber).toBe(input.phoneNumber);
+    expect(user.email.value).toBe(input.email);
+    expect(user.cpf.value).toBe(input.cpf);
+    expect(user.birthday.value).toBe(input.birthday);
+    expect(user.phoneNumber.value).toBe(input.phoneNumber);
   });
 
   it('should throw an error if the user does not exist', async () => {
