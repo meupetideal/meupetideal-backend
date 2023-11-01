@@ -1,9 +1,15 @@
 import 'reflect-metadata';
+import * as Sentry from '@sentry/node';
 import { ServerFactory } from './http/server';
 
 import './module';
 
 async function bootstrap() {
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+    tracesSampleRate: 1.0,
+  });
+
   const app = await ServerFactory.create();
 
   const port = process.env.APP_PORT ? Number(process.env.APP_PORT) : 3333;

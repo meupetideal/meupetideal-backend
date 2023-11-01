@@ -1,4 +1,5 @@
 import fastify, { FastifyInstance } from 'fastify';
+import * as Sentry from '@sentry/node';
 import fastifyMultipart from '@fastify/multipart';
 import { AppError } from '@core/application/errors/app.error';
 import { EntityValidationError } from '@core/enterprise/errors/validation.error';
@@ -89,10 +90,15 @@ export class FastifyServer implements AppServer {
         console.log(error);
       }
 
+      let sentryErrorId: string | null = null;
+      if (process.env.NODE_ENV === 'production') {
+        sentryErrorId = Sentry.captureException(error);
+      }
+
       return reply.status(500).send({
         type: 'InternalServerError',
         message: 'Internal Server Error',
-        sentryErrorId: null,
+        sentryErrorId,
       });
     });
   }
