@@ -7,17 +7,29 @@ import { injectable } from 'tsyringe';
 
 @injectable()
 export class HandlebarsMailTemplate implements MailTemplateGateway {
-  private BASE_PATH = path.resolve(
-    __dirname,
-    '..',
-    '..',
-    process.env.NODE_ENV === 'production' ? 'dist' : 'src',
-    'domain',
-    'emails',
-    'application',
-    'gateways',
-    'templates',
-  );
+  private BASE_PATH =
+    process.env.NODE_ENV === 'production'
+      ? path.resolve(
+          __dirname,
+          '..',
+          '..',
+          'dist',
+          'domain',
+          'emails',
+          'application',
+          'gateways',
+          'templates',
+        )
+      : path.resolve(
+          __dirname,
+          '..',
+          '..',
+          'domain',
+          'emails',
+          'application',
+          'gateways',
+          'templates',
+        );
 
   constructor() {
     this.registerPartials();
