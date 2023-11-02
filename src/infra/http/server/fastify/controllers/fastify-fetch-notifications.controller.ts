@@ -8,8 +8,8 @@ import { Controller } from '@core/infra/controller';
 import { ZodValidationPipe } from 'src/infra/http/pipes/zod-validation.pipe';
 
 const querysSchema = z.object({
-  page: z.number().int().positive(),
-  perPage: z.number().int().positive(),
+  page: z.coerce.number().int().positive(),
+  perPage: z.coerce.number().int().positive(),
 });
 
 type QuerysSchema = z.infer<typeof querysSchema>;
