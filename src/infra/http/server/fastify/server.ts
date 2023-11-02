@@ -1,4 +1,5 @@
 import fastify, { FastifyInstance } from 'fastify';
+import cors from '@fastify/cors';
 import * as Sentry from '@sentry/node';
 import fastifyMultipart from '@fastify/multipart';
 import { AppError } from '@core/application/errors/app.error';
@@ -63,6 +64,9 @@ export class FastifyServer implements AppServer {
   }
 
   private async registerHandlers(): Promise<void> {
+    this._server.register(cors, {
+      origin: [/localhost/, /\.meupetideal\.com\.br$/],
+    });
     this._server.register(fastifyMultipart);
 
     this._server.setErrorHandler((error, _, reply) => {
