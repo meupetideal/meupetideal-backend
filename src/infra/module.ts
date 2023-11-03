@@ -22,6 +22,7 @@ import { PrismaAnimalPhotosRepository } from './database/prisma/repositories/pri
 import { ZohoMail } from './gateways/zoho-mail';
 import { PrismaRefreshTokensRepository } from './database/prisma/repositories/prisma-refresh-tokens.repository';
 import { FirebaseStorage } from './gateways/firebase-storage';
+import { MailtrapMail } from './gateways/mailtrap-mail';
 
 // Events
 container.registerSingleton('OnUserCreated', OnUserCreated);
@@ -57,9 +58,12 @@ container.registerSingleton(
 );
 
 // Gateways
+const mailGateways = { zoho: ZohoMail, mailtrap: MailtrapMail };
+const mailGateway = mailGateways[process.env.MAIL_GATEWAY ?? 'mailtrap'];
+container.registerSingleton('MailGateway', mailGateway);
+
 container.registerSingleton('HasherGateway', BcryptHasher);
 container.registerSingleton('EncrypterGateway', JwtEncrypter);
-container.registerSingleton('MailGateway', ZohoMail);
 container.registerSingleton('MailTemplateGateway', HandlebarsMailTemplate);
 container.registerSingleton('StorageGateway', FirebaseStorage);
 

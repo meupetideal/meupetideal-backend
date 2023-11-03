@@ -26,7 +26,7 @@ export class OnUserCreated implements EventHandler {
         name: user.name,
         email: user.email.value,
       },
-      subject: 'Boas vindas ao MeuPetIdeal!',
+      subject: 'Boas-vindas ao MeuPetIdeal!',
       template: 'new-user',
       variables: {
         name: user.name,
