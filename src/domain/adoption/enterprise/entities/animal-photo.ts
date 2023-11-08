@@ -7,8 +7,11 @@ interface AnimalPhotoProps {
 }
 
 export class AnimalPhoto extends Entity<AnimalPhotoProps> {
-  public static create(props: AnimalPhotoProps): AnimalPhoto {
-    return new AnimalPhoto(props);
+  public static create(
+    props: AnimalPhotoProps,
+    id?: UniqueEntityId,
+  ): AnimalPhoto {
+    return new AnimalPhoto(props, id);
   }
 
   get animalId(): UniqueEntityId {

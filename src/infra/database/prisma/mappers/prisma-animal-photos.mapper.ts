@@ -1,7 +1,18 @@
+import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
 import { AnimalPhoto } from '@domain/adoption/enterprise/entities/animal-photo';
-import { Prisma } from '@prisma/client';
+import { Prisma, AnimalPhoto as PrismaAnimalPhoto } from '@prisma/client';
 
 export class PrismaAnimalPhotoMapper {
+  public static toDomain(raw: PrismaAnimalPhoto): AnimalPhoto {
+    return AnimalPhoto.create(
+      {
+        animalId: UniqueEntityId.create(raw.animalId),
+        photoUrl: raw.photoUrl,
+      },
+      UniqueEntityId.create(raw.id),
+    );
+  }
+
   public static toPrismaCreateMany(
     photos: AnimalPhoto[],
   ): Prisma.AnimalPhotoCreateManyArgs {

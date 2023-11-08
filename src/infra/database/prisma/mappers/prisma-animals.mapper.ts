@@ -1,4 +1,5 @@
 import { UniqueEntityId } from '@core/enterprise/unique-entity-id.vo';
+import { AnimalPhotoList } from '@domain/adoption/enterprise/entities/animal-photo-list';
 import { Cat } from '@domain/adoption/enterprise/entities/cat';
 import { Dog } from '@domain/adoption/enterprise/entities/dog';
 import { AnimalCatBreed } from '@domain/adoption/enterprise/entities/value-objects/animal-cat-breed.vo';
@@ -8,10 +9,19 @@ import { AnimalGender } from '@domain/adoption/enterprise/entities/value-objects
 import { AnimalSize } from '@domain/adoption/enterprise/entities/value-objects/animal-size.vo';
 import { AnimalStatus } from '@domain/adoption/enterprise/entities/value-objects/animal-status.vo';
 import { AnimalTemperament } from '@domain/adoption/enterprise/entities/value-objects/animal-temperament.vo';
-import { Prisma, Animal as PrismaAnimal } from '@prisma/client';
+import {
+  Prisma,
+  AnimalPhoto as PrismaAnimalPhoto,
+  Animal as PrismaAnimal,
+} from '@prisma/client';
+import { PrismaAnimalPhotoMapper } from './prisma-animal-photos.mapper';
+
+type PrismaAnimalWithPhotos = PrismaAnimal & {
+  photos: PrismaAnimalPhoto[] | null;
+};
 
 export class PrismaAnimalMapper {
-  static toDomain(raw: PrismaAnimal): Dog | Cat {
+  static toDomain(raw: PrismaAnimalWithPhotos): Dog | Cat {
     const props = {
       ownerId: UniqueEntityId.create(raw.ownerId),
       name: raw.name,
@@ -28,6 +38,11 @@ export class PrismaAnimalMapper {
       isNeutered: raw.isNeutered,
       isSpecialNeeds: raw.isSpecialNeeds,
       status: AnimalStatus.create(raw.status),
+      photos: raw.photos
+        ? new AnimalPhotoList(
+            raw.photos.map((photo) => PrismaAnimalPhotoMapper.toDomain(photo)),
+          )
+        : undefined,
     };
 
     switch (raw.species) {

@@ -29,6 +29,7 @@ export class PrismaAnimalsRepository implements AnimalsRepository {
     filters,
   }: SearchInput<AnimalSearchFilters>): Promise<SearchOutput<Cat | Dog>> {
     const animals = await this.prismaService.animal.findMany({
+      include: { photos: true },
       skip: (page - 1) * perPage,
       take: perPage,
       where: {
@@ -63,6 +64,7 @@ export class PrismaAnimalsRepository implements AnimalsRepository {
 
   public async findManyByOwnerId(ownerId: string): Promise<(Cat | Dog)[]> {
     const animals = await this.prismaService.animal.findMany({
+      include: { photos: true },
       where: { ownerId },
     });
 
@@ -71,6 +73,7 @@ export class PrismaAnimalsRepository implements AnimalsRepository {
 
   public async findById(id: string): Promise<Cat | Dog | undefined> {
     const animal = await this.prismaService.animal.findUnique({
+      include: { photos: true },
       where: { id },
     });
 
