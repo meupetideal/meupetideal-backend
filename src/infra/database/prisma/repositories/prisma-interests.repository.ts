@@ -38,6 +38,11 @@ export class PrismaInterestsRepository implements InterestsRepository {
 
   public async findAllFromUserId(userId: string): Promise<Interest[]> {
     const interests = await this.prismaService.interest.findMany({
+      include: {
+        animal: {
+          include: { photos: true },
+        },
+      },
       where: { userId },
     });
 

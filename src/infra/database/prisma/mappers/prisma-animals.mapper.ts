@@ -16,7 +16,7 @@ import {
 } from '@prisma/client';
 import { PrismaAnimalPhotoMapper } from './prisma-animal-photos.mapper';
 
-type PrismaAnimalWithPhotos = PrismaAnimal & {
+export type PrismaAnimalWithPhotos = PrismaAnimal & {
   photos: PrismaAnimalPhoto[] | null;
 };
 

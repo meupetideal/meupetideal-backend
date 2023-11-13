@@ -4,10 +4,12 @@ import { PickOut } from '@core/enterprise/logic/pick-out';
 import { Entity } from '@core/enterprise/entity';
 import { InterestValidatorFactory } from '../validators/interest.validator';
 import { InterestDemonstratedEvent } from '../events/interest-demonstrated.event';
+import { Animal } from './animal';
 
 interface InterestProps {
   animalId: UniqueEntityId;
   userId: UniqueEntityId;
+  animal?: Animal;
   expressedAt: Date;
 }
 
@@ -40,6 +42,15 @@ export class Interest extends Entity<InterestProps> {
 
   set animalId(animalId: UniqueEntityId) {
     this.props.animalId = animalId;
+    this._touch();
+  }
+
+  get animal(): Animal | undefined {
+    return this.props.animal;
+  }
+
+  set animal(animal: Animal | undefined) {
+    this.props.animal = animal;
     this._touch();
   }
 
