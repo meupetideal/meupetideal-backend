@@ -7,7 +7,8 @@ export class HttpInterestPresenter {
       id: interest.id.value,
       animalId: interest.animalId.value,
       userId: interest.userId.value,
-      animal: HttpAnimalPresenter.toHttp(interest.animal as any),
+      animal:
+        interest.animal && HttpAnimalPresenter.toHttp(interest.animal as any),
       expressedAt: interest.expressedAt,
     };
   }
